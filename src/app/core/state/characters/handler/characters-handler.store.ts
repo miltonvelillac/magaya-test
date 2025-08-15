@@ -13,9 +13,9 @@ export class CharactersHandlerStore {
   isLoading = this.#store.isLoading;
   error = this.#store.error;
 
-  loadCharactersByIds(props: { ids: string[] }): void {
-    const { ids } = props;
-    this.#store.loadCharactersByIds({ ids }).pipe(take(1)).subscribe();
+  loadCharactersByIds(props: { ids: number[], indexFrom: number }): void {
+    const { ids, indexFrom } = props;
+    this.#store.loadCharactersByIds({ ids, indexFrom }).pipe(take(1)).subscribe();
   }
 
   setCharacters(props: { characters: CharacterModel[] }): void {
@@ -23,7 +23,7 @@ export class CharactersHandlerStore {
     this.#store.setCharacters({ characters });
   }
 
-  setCharacterIds(props: { ids: string[] }): void {
+  setCharacterIds(props: { ids: number[] }): void {
     const { ids } = props;
     this.#store.setCharacterIds({ ids });
   }

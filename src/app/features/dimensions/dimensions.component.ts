@@ -1,16 +1,19 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
+import { CharacterHelperService } from '@core/services/character-helper/character-helper.service';
 import { CharactersHandlerStore } from '@core/state/characters/handler/characters-handler.store';
 import { LocationHandlerStore } from '@core/state/location/handler/location-handler.store';
 import { TextConstant } from '@shared/constants/text.constant';
+import { LocationModel } from '@shared/models/location.model';
 import { CharacterColumn } from '@shared/types/character-column.type';
 import { GlobalSpinnerComponent } from '@shared/ui/atoms/global-spinner/global-spinner.component';
 import { TableComponent } from '@shared/ui/atoms/table/table.component';
 import { SearchFieldComponent } from '@shared/ui/molecules/search-field/search-field.component';
+import { RegexUtils } from '@shared/utils/regex/regex.utils';
 
 export enum DimensionsFormNamesEnum {
-  dimension = 'dimension'  
+  dimension = 'dimension'
 }
 
 @Component({
@@ -30,12 +33,15 @@ export enum DimensionsFormNamesEnum {
 export class DimensionsComponent {
   #locationHandlerStore = inject(LocationHandlerStore);
   #charactersHandlerStore = inject(CharactersHandlerStore);
+  #characterHelperService = inject(CharacterHelperService);
 
   locations = this.#locationHandlerStore.locations;
-  isLoading = this.#locationHandlerStore.isLoading;
-  errror = this.#locationHandlerStore.error;
+  locationLoading = this.#locationHandlerStore.isLoading;
+  locationErrror = this.#locationHandlerStore.error;
 
   characters = this.#charactersHandlerStore.characters;
+  charactersLoading = this.#charactersHandlerStore.isLoading;
+  charactersErrror = this.#charactersHandlerStore.error;
 
   labels = TextConstant.dimension;
   formNames = DimensionsFormNamesEnum;
@@ -47,10 +53,20 @@ export class DimensionsComponent {
   pageSize = signal(10);
   pageLength = signal(0);
   displayedColumns: CharacterColumn[] = ['id', 'name', 'status', 'species', 'gender'];
-  charactersData = computed(() => this.characters() || []);
+
+  charactersData = computed(() => {
+    const characters = this.characters() || [];
+
+    const pageSize = this.pageSize();
+    const index = this.pageIndex() * pageSize;
+    const indexTo = index + pageSize;
+
+    return characters.slice(index, indexTo);
+  });
+  isLoading = computed(() => this.locationLoading() || this.charactersLoading());
 
   constructor() {
-    this.getLocations();
+    this.loadCharactersByIds();
     this.setDisableForm();
   }
 
@@ -73,33 +89,20 @@ export class DimensionsComponent {
     this.pageSize.update(() => e.pageSize);
   }
 
-  private getLocations(): void {
+  private loadCharactersByIds(): void {
     effect(() => {
-      console.log(this.locations())
       const locations = this.locations();
-      const residentIds: { [key:string]: string } = {};
+      const characterIds = this.#characterHelperService.getCharacterIds({ locations });
 
-      locations.forEach(loc => {
-        loc.residents.forEach(res => {
-          const characterId = res.match(/\/(\d+)(?:\/)?(?:\?.*)?$/)?.[1] || '';
-          residentIds[`${characterId}`] = characterId;
-        });
-      });
-
-      const characterIds = Object.values(residentIds);
       this.#charactersHandlerStore.setCharacterIds({ ids: characterIds });
-      console.log(characterIds)
       this.pageLength.update(() => characterIds?.length || 0);
 
-      if(characterIds?.length > 0 ) {
-        // Search by 10
-        const pageSize = this.pageSize();
-        const index = this.pageIndex() * pageSize;
-        const indexTo = index + pageSize;
-        const idsToSeach = characterIds.slice(index, indexTo);
-        this.#charactersHandlerStore.loadCharactersByIds({ ids: idsToSeach });
+      if (characterIds?.length > 0) {
+        const { indexFrom, indexTo } = this.#characterHelperService.getTableIndexes({ pageSize: this.pageSize(), pageIndex: this.pageIndex() });
+        const idsToSeach = this.#characterHelperService.getIdsToSearch({ characterIds, indexFrom, indexTo });
+        this.#charactersHandlerStore.loadCharactersByIds({ ids: idsToSeach, indexFrom });
       } else {
-        this.#charactersHandlerStore.setCharacters({ characters: [] });      
+        this.#charactersHandlerStore.setCharacters({ characters: [] });
       }
     });
   }

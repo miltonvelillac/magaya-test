@@ -1,4 +1,4 @@
 export interface CharacterApiRequestModel {
-    ids: string[];
+    ids: number[];
     page?: number;
 }

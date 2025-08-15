@@ -1,4 +1,4 @@
-import { inject } from "@angular/core";
+import { inject, untracked } from "@angular/core";
 import { RickAndMortyApiService } from "@core/api/rick-and-morty/rick-and-morty.api.service";
 import { CharactersMapper } from "@core/mappers/characters/characters.mapper";
 import {
@@ -10,10 +10,10 @@ import {
 } from '@ngrx/signals';
 import { CharacterModel } from "@shared/models/character.model";
 import { ErrorModel } from "@shared/models/error.model";
-import { catchError, Observable, tap, throwError } from "rxjs";
+import { catchError, Observable, of, tap, throwError } from "rxjs";
 
 type CharactersState = {
-  characterIds: string[];
+  characterIds: number[];
   characters: CharacterModel[];
   isLoading: boolean;
   error?: ErrorModel;
@@ -38,23 +38,33 @@ export const CharactersReducerStore = signalStore(
     })
   ),
   withMethods((store, rickAndMortyApiService = inject(RickAndMortyApiService), charactersMapper = inject(CharactersMapper)) => ({
-    loadCharactersByIds(props: { ids: string[] }): Observable<any> {
+    loadCharactersByIds(props: { ids: number[], indexFrom: number }): Observable<any> {
       patchState(store, { isLoading: true });
-      const { ids } = props;
-      const request = charactersMapper.getRequest({ ids });
+      const { ids, indexFrom } = props;
+      const currentCharacters = untracked(() => store.characters());      
+      const idsToSearch: number[] = charactersMapper.getIdsToSearch({ currentCharacters, characterIds: ids });
+      
+      // NOTE: Since the data shouldn't change frequently, the UI only calls the API when it doesn't have the data.
+      if(idsToSearch.length === 0) {
+        patchState(store, { isLoading: false, error: undefined })
+        return of();
+      }
+
+      const request = charactersMapper.getRequest({ ids: idsToSearch });
       return rickAndMortyApiService.getCharacters(request).pipe(
         tap((resp) => {
           const response = charactersMapper.getResponseByCharacterIds(resp);
-          patchState(store, { isLoading: false, characters: response, error: undefined })
+          const characters = charactersMapper.getCharactersByIndex({ currentCharacters, charactersFromApi: response, indexFrom });
+          patchState(store, { isLoading: false, characters, error: undefined })
         }),
-        catchError(error => throwError(() => patchState(store, { isLoading: false, characters: [], error: {message: ''} })))
+        catchError(error => throwError(() => patchState(store, { isLoading: false, characters: [], error: { message: '' } })))
       );
     },
     setCharacters(props: { characters: CharacterModel[] }): void {
       const { characters } = props;
       patchState(store, { characters });
     },
-    setCharacterIds(props: {ids: string[] }): void {
+    setCharacterIds(props: { ids: number[] }): void {
       const { ids } = props;
       patchState(store, { characterIds: ids })
     }
