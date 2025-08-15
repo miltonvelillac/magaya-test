@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CharacterModel } from '@shared/models/character.model';
 import { LocationModel } from '@shared/models/location.model';
 import { RegexUtils } from '@shared/utils/regex/regex.utils';
 
@@ -32,6 +33,14 @@ export class CharacterHelperService {
     const indexFrom = pageIndex * pageSize;
     const indexTo = indexFrom + pageSize;
     return { indexFrom, indexTo };
+  }
+
+  getCharactersToShow(props: { characters: CharacterModel[], pageSize: number, pageIndex: number }) {
+    const { characters, pageSize, pageIndex } = props;
+
+    const index = pageIndex * pageSize;
+    const indexTo = index + pageSize;
+    return characters.slice(index, indexTo);
   }
 
 }

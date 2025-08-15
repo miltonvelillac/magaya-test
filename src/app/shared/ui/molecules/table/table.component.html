@@ -7,6 +7,12 @@
   }
   <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns();"></tr>
+
+  <tr *matNoDataRow>
+    <td [attr.colspan]="displayedColumns().length">
+      <p class="table__no-data">{{emptyDataMessage()}}</p>      
+    </td>
+  </tr>
 </table>
 
 @if (hasPagination()) {

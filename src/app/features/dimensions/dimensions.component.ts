@@ -5,16 +5,12 @@ import { CharacterHelperService } from '@core/services/character-helper/characte
 import { CharactersHandlerStore } from '@core/state/characters/handler/characters-handler.store';
 import { LocationHandlerStore } from '@core/state/location/handler/location-handler.store';
 import { TextConstant } from '@shared/constants/text.constant';
-import { LocationModel } from '@shared/models/location.model';
+import { DimensionsFormNamesEnum } from '@shared/enums/dimensions-form-names.enum';
 import { CharacterColumn } from '@shared/types/character-column.type';
 import { GlobalSpinnerComponent } from '@shared/ui/atoms/global-spinner/global-spinner.component';
-import { TableComponent } from '@shared/ui/atoms/table/table.component';
+import { SnackBarService } from '@shared/ui/atoms/snack-bar/snack-bar.service';
+import { TableComponent } from '@shared/ui/molecules/table/table.component';
 import { SearchFieldComponent } from '@shared/ui/molecules/search-field/search-field.component';
-import { RegexUtils } from '@shared/utils/regex/regex.utils';
-
-export enum DimensionsFormNamesEnum {
-  dimension = 'dimension'
-}
 
 @Component({
   selector: 'app-dimensions',
@@ -34,6 +30,7 @@ export class DimensionsComponent {
   #locationHandlerStore = inject(LocationHandlerStore);
   #charactersHandlerStore = inject(CharactersHandlerStore);
   #characterHelperService = inject(CharacterHelperService);
+  #snackBarService = inject(SnackBarService);
 
   locations = this.#locationHandlerStore.locations;
   locationLoading = this.#locationHandlerStore.isLoading;
@@ -49,24 +46,27 @@ export class DimensionsComponent {
     [this.formNames.dimension]: new FormControl('', [Validators.required])
   });
 
+  emptyDataMessage = signal(this.labels.initSearch);
   pageIndex = signal(0);
   pageSize = signal(10);
   pageLength = signal(0);
   displayedColumns: CharacterColumn[] = ['id', 'name', 'status', 'species', 'gender'];
 
   charactersData = computed(() => {
-    const characters = this.characters() || [];
-
-    const pageSize = this.pageSize();
-    const index = this.pageIndex() * pageSize;
-    const indexTo = index + pageSize;
-
-    return characters.slice(index, indexTo);
+    const characters = this.#characterHelperService.getCharactersToShow(
+      {
+        characters: this.characters(),
+        pageIndex: this.pageIndex(),
+        pageSize: this.pageSize()
+      }
+    );
+    return characters;
   });
   isLoading = computed(() => this.locationLoading() || this.charactersLoading());
 
   constructor() {
     this.loadCharactersByIds();
+    this.loadLocationsError();
     this.setDisableForm();
   }
 
@@ -106,6 +106,16 @@ export class DimensionsComponent {
       }
     });
   }
+
+  private loadLocationsError(): void {
+    effect(() => {
+      const errorMessage = this.locationErrror ? this.locationErrror() : undefined;
+      if(!errorMessage) return;
+      console.error(errorMessage?.messageFromApi);
+      this.emptyDataMessage.update(() => this.labels.noDataFound);
+      this.#snackBarService.openErrorSnackBar({ message: errorMessage?.message || '', actionButtonText: this.labels.snackbarErrorBtn });
+    })
+  };
 
   private setDisableForm(): void {
     effect(() => {

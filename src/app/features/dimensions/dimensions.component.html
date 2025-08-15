@@ -1,22 +1,25 @@
-<app-search-field
-    [formField]="form.controls[formNames.dimension]"
-    idInput="dimensionSeachField"
-    nameInput="dimension"
-    [labelInput]="labels.labelInputField"
-    [placeholderInput]="labels.placeholderInputField"
-    [focus]="true"
-    idBtn="dimensionSearchBtn"
-    [labelBtn]="labels.labelSearchBtn"
-    [disabledBtn]="disableSearchBtn()"
-    (onEnter)="search()"
-    (onClick)="search()"
-/>
-<app-table
-    [displayedColumns]="displayedColumns"
-    [rows]="charactersData()"
-    [length]="pageLength()"
-    [pageIndex]="pageIndex()"
-    [pageSize]="pageSize()"
-    (pageChange)="onPage($event)">
-</app-table>
+<section>
+    <app-search-field
+        [formField]="form.controls[formNames.dimension]"
+        idInput="dimensionSeachField"
+        nameInput="dimension"
+        [labelInput]="labels.labelInputField"
+        [placeholderInput]="labels.placeholderInputField"
+        [focus]="true"
+        idBtn="dimensionSearchBtn"
+        [labelBtn]="labels.labelSearchBtn"
+        [disabledBtn]="disableSearchBtn()"
+        (onEnter)="search()"
+        (onClick)="search()"
+    />
+    <app-table
+        [displayedColumns]="displayedColumns"
+        [rows]="charactersData()"
+        [length]="pageLength()"
+        [pageIndex]="pageIndex()"
+        [pageSize]="pageSize()"
+        [emptyDataMessage]="emptyDataMessage()"
+        (pageChange)="onPage($event)">
+    </app-table>
+</section>
 <app-global-spinner [isLoading]="isLoading()"/>

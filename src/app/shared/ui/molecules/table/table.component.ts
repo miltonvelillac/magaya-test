@@ -20,6 +20,7 @@ export class TableComponent<T> {
   pageSizeOptions = input([5, 10, 20]);
   hasPagination = input(true);
   paginationAriaLabel = input('');
+  emptyDataMessage = input('');
 
   pageChange = output<PageEvent>();
 

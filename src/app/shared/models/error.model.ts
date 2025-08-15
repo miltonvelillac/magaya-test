@@ -1,3 +1,4 @@
 export interface ErrorModel {
-    message: string;
+    message?: string;
+    messageFromApi?: string;
 }

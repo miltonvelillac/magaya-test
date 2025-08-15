@@ -42,10 +42,15 @@ export const LocationReducerStore = signalStore(
       const request = locationMapper.getRequest({ dimension });
       return rickAndMortyApiService.getLocationsByDimension(request).pipe(
         tap((resp) => {
-          const response = locationMapper.getResponse(resp);
+          const response = locationMapper.getResponse({ apiResponse: resp });
           patchState(store, { isLoading: false, locations: response.results, error: undefined })
         }),
-        catchError(error => throwError(() => patchState(store, { isLoading: false, locations: [], error: {message: ''} })))
+        catchError(err => 
+          {
+            const error: ErrorModel = locationMapper.getErrorResponse({ error: err, dimesionSearch: dimension });
+            return throwError(() => patchState(store, { isLoading: false, locations: [], error }));
+          }
+        )
       );
     },
 
