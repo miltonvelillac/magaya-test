@@ -1,0 +1,20 @@
+<section class="search-field">
+    <app-input-text
+        [formField]="formField()"
+        [id]="idInput()"
+        [name]="nameInput()"
+        [label]="labelInput()"
+        [placeholder]="placeholderInput()"
+        [focus]="focus()"
+        [icon]="icon()"
+        [showIcon]="showCloseIcon()"
+        (keydown.enter)="onEnter.emit()"
+        (onIconClick)="clearValue()"
+    />
+    <app-button
+        [id]="idBtn()"
+        [label]="labelBtn()"
+        [disabled]="disabledBtn()"
+        (click)="onClick.emit()"
+    />
+</section>

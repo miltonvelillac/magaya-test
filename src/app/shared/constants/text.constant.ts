@@ -1,6 +1,7 @@
 export const TextConstant = {
     dimension: {
-        labelField: 'Dimension',
-        placeholder: 'Search by dimension'
+        labelInputField: 'Dimension',
+        labelSearchBtn: 'Search',
+        placeholderInputField: 'Search by dimension',
     }
 }

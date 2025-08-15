@@ -1,12 +1,23 @@
-<mat-form-field [appearance]="appearance()" [floatLabel]="floatLabel()">
-    <mat-label>{{label()}}</mat-label>
-    <input
-        #appInputText
-        matInput
-        [formControl]="formField()"
-        [id]="id()"
-        [name]="name()"
-        [placeholder]="placeholder()"
-    >
-    <mat-error>{{ errorMessage() }}</mat-error>
-</mat-form-field>
+<section>
+    <mat-form-field [appearance]="appearance()" [floatLabel]="floatLabel()" class="field">
+        <mat-label>{{label()}}</mat-label>
+        <input
+            #appInputText
+            matInput
+            [formControl]="formField()"
+            [id]="id()"
+            [name]="name()"
+            [placeholder]="placeholder()"
+        >
+        @if(icon()) {
+            <mat-icon
+                matSuffix
+                class="field__clear"
+                [class.hidden]="!showIcon()"
+                [class.visible]="showIcon()"
+                (click)="onIconClick.emit()"
+            >{{icon()}}</mat-icon>
+        }
+        <mat-error>{{ errorMessage() }}</mat-error>
+    </mat-form-field>
+</section>

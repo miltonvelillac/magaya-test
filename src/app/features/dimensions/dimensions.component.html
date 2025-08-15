@@ -1,9 +1,19 @@
-<app-input-text
+<app-search-field
     [formField]="form.controls[formNames.dimension]"
-    id="dimensionSeachField"
-    name="dimension"
-    [label]="labels.labelField"
-    [placeholder]="labels.placeholder"
+    idInput="dimensionSeachField"
+    nameInput="dimension"
+    [labelInput]="labels.labelInputField"
+    [placeholderInput]="labels.placeholderInputField"
     [focus]="true"
+    idBtn="dimensionSearchBtn"
+    [labelBtn]="labels.labelSearchBtn"
+    [disabledBtn]="disableSearchBtn()"
+    (onEnter)="search()"
+    (onClick)="search()"
+/>
+<app-table
+    [dataSource]="ELEMENT_DATA"
+    [displayedColumns]="displayedColumns"
+    [hasPagination]="true"
 />
 <app-global-spinner [isLoading]="isLoading()"/>
