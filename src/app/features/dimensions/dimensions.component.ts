@@ -1,13 +1,16 @@
-import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { PageEvent } from '@angular/material/paginator';
+import { CharactersHandlerStore } from '@core/state/characters/handler/characters-handler.store';
 import { LocationHandlerStore } from '@core/state/location/handler/location-handler.store';
 import { TextConstant } from '@shared/constants/text.constant';
+import { CharacterColumn } from '@shared/types/character-column.type';
 import { GlobalSpinnerComponent } from '@shared/ui/atoms/global-spinner/global-spinner.component';
 import { TableComponent } from '@shared/ui/atoms/table/table.component';
 import { SearchFieldComponent } from '@shared/ui/molecules/search-field/search-field.component';
 
 export enum DimensionsFormNamesEnum {
-  dimension = 'dimension'
+  dimension = 'dimension'  
 }
 
 @Component({
@@ -26,10 +29,13 @@ export enum DimensionsFormNamesEnum {
 })
 export class DimensionsComponent {
   #locationHandlerStore = inject(LocationHandlerStore);
+  #charactersHandlerStore = inject(CharactersHandlerStore);
 
   locations = this.#locationHandlerStore.locations;
   isLoading = this.#locationHandlerStore.isLoading;
   errror = this.#locationHandlerStore.error;
+
+  characters = this.#charactersHandlerStore.characters;
 
   labels = TextConstant.dimension;
   formNames = DimensionsFormNamesEnum;
@@ -37,20 +43,11 @@ export class DimensionsComponent {
     [this.formNames.dimension]: new FormControl('', [Validators.required])
   });
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-
-  ELEMENT_DATA: any[] = [
-    { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-    { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-    { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-    { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-    { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-    { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-    { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-    { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-    { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-    { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-  ];
+  pageIndex = signal(0);
+  pageSize = signal(10);
+  pageLength = signal(0);
+  displayedColumns: CharacterColumn[] = ['id', 'name', 'status', 'species', 'gender'];
+  charactersData = computed(() => this.characters() || []);
 
   constructor() {
     this.getLocations();
@@ -71,10 +68,40 @@ export class DimensionsComponent {
     this.#locationHandlerStore.loadLocationsByDimension({ dimension: dimension || '' });
   }
 
+  onPage(e: PageEvent) {
+    this.pageIndex.update(() => e.pageIndex);
+    this.pageSize.update(() => e.pageSize);
+  }
+
   private getLocations(): void {
     effect(() => {
       console.log(this.locations())
-    })
+      const locations = this.locations();
+      const residentIds: { [key:string]: string } = {};
+
+      locations.forEach(loc => {
+        loc.residents.forEach(res => {
+          const characterId = res.match(/\/(\d+)(?:\/)?(?:\?.*)?$/)?.[1] || '';
+          residentIds[`${characterId}`] = characterId;
+        });
+      });
+
+      const characterIds = Object.values(residentIds);
+      this.#charactersHandlerStore.setCharacterIds({ ids: characterIds });
+      console.log(characterIds)
+      this.pageLength.update(() => characterIds?.length || 0);
+
+      if(characterIds?.length > 0 ) {
+        // Search by 10
+        const pageSize = this.pageSize();
+        const index = this.pageIndex() * pageSize;
+        const indexTo = index + pageSize;
+        const idsToSeach = characterIds.slice(index, indexTo);
+        this.#charactersHandlerStore.loadCharactersByIds({ ids: idsToSeach });
+      } else {
+        this.#charactersHandlerStore.setCharacters({ characters: [] });      
+      }
+    });
   }
 
   private setDisableForm(): void {

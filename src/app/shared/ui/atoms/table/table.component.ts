@@ -1,33 +1,29 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, input, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [
-    MatTableModule,
-    MatPaginatorModule
-  ],
+  imports: [MatTableModule, MatPaginatorModule],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TableComponent implements AfterViewInit {
+export class TableComponent<T> {
   displayedColumns = input.required<string[]>();
-  dataSource = input.required({ transform: this.getDataSource });
-  paginationArialLabel = input('');
-  hasPagination = input(false);
+  rows = input.required<T[]>();
+
+  length = input.required<number>();
+  pageIndex = input(0);
+  pageSize = input(10);
   pageSizeOptions = input([5, 10, 20]);
+  hasPagination = input(true);
+  paginationAriaLabel = input('');
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  pageChange = output<PageEvent>();
 
-  ngAfterViewInit() {
-    this.dataSource().paginator = this.paginator;
-  }
-
-  getDataSource(data: unknown[]): MatTableDataSource<unknown[]> {
-    return new MatTableDataSource<any>(data);
+  onPage(e: PageEvent) {
+    this.pageChange.emit(e);
   }
 }

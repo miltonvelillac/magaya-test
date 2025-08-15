@@ -1,10 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../env/environment';
-import { LocationModel } from '../../../shared/models/location.model';
-import { PaginatedResponseModel } from '../../../shared/models/paginated-response.model';
+import { CharacterApiRequestModel } from '@shared/models/character-api-request.model';
 import { LocationApiRequestModel } from '@shared/models/location-api-request.model';
 import { Observable } from 'rxjs';
+import { environment } from '../../env/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,25 @@ export class RickAndMortyApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apis.rickAndMorty;
 
-  getLocationsByDimension(request: LocationApiRequestModel): Observable<PaginatedResponseModel<LocationModel>> {
+  // Note: the methods return any because we are controlling the model response in the mapper service
+
+  getCharacters(request: CharacterApiRequestModel): Observable<any> {
+    const { ids, page } = request;
+    const params = new HttpParams({
+      fromObject: {
+        ...(page ? { page } : {})
+      }
+    });
+
+    const idsParams = ids?.join(',') || '';
+
+    return this.http.get(
+      `${this.baseUrl}/character/${idsParams}`,
+      { params }
+    );
+  }
+
+  getLocationsByDimension(request: LocationApiRequestModel): Observable<any> {
     const { dimension, page } = request;
     const params = new HttpParams({
       fromObject: {
@@ -22,10 +39,10 @@ export class RickAndMortyApiService {
       }
     });
 
-    return this.http.get<PaginatedResponseModel<LocationModel>>(
+    return this.http.get(
       `${this.baseUrl}/location`,
       { params }
     );
   }
-  
+
 }

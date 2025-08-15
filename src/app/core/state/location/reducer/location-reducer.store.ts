@@ -12,12 +12,6 @@ import { ErrorModel } from "@shared/models/error.model";
 import { LocationModel } from "@shared/models/location.model";
 import { catchError, Observable, tap, throwError } from "rxjs";
 
-type PaginationInfo = { count: number; pages: number; next: string|null; prev: string|null };
-type Location = { id:number; name:string; type:string; dimension:string; residents:string[]; url:string; created:string };
-type PageResp<T> = { info: PaginationInfo; results: T[] };
-
-const BASE = 'https://rickandmortyapi.com/api';
-
 type LocationState = {
   locations: LocationModel[];
   isLoading: boolean;
@@ -38,7 +32,7 @@ export const LocationReducerStore = signalStore(
       { locations, isLoading }
     ) => ({
       locations,
-      isLoading
+      isLoading,
     })
   ),
   withMethods((store, rickAndMortyApiService = inject(RickAndMortyApiService), locationMapper = inject(LocationMapper)) => ({

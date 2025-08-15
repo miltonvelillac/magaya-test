@@ -12,8 +12,11 @@
     (onClick)="search()"
 />
 <app-table
-    [dataSource]="ELEMENT_DATA"
     [displayedColumns]="displayedColumns"
-    [hasPagination]="true"
-/>
+    [rows]="charactersData()"
+    [length]="pageLength()"
+    [pageIndex]="pageIndex()"
+    [pageSize]="pageSize()"
+    (pageChange)="onPage($event)">
+</app-table>
 <app-global-spinner [isLoading]="isLoading()"/>
