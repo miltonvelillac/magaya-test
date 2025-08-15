@@ -1,1 +1,9 @@
-<p>dimensions works!</p>
+<app-input-text
+    [formField]="form.controls[formNames.dimension]"
+    id="dimensionSeachField"
+    name="dimension"
+    [label]="labels.labelField"
+    [placeholder]="labels.placeholder"
+    [focus]="true"
+/>
+<app-global-spinner [isLoading]="isLoading()"/>
