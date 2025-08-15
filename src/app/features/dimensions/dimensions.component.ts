@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { RickAndMortyApiService } from '../../core/api/rick-and-morty/rick-and-morty.api.service';
+import { Component, effect, inject, OnInit } from '@angular/core';
+import { LocationHandlerStore } from '@core/state/location/handler/location-handler.store';
 
 @Component({
   selector: 'app-dimensions',
@@ -9,11 +9,18 @@ import { RickAndMortyApiService } from '../../core/api/rick-and-morty/rick-and-m
   styleUrl: './dimensions.component.scss'
 })
 export class DimensionsComponent implements OnInit {
-  #rickAndMortyService = inject(RickAndMortyApiService);
+  #locationHandlerStore = inject(LocationHandlerStore);
+
+  locations = this.#locationHandlerStore.locations;
+  isLoading = this.#locationHandlerStore.isLoading;
+
+  constructor() {
+    effect(() => {
+      console.log(this.locations())
+    })
+  }
   
   ngOnInit(): void {
-    this.#rickAndMortyService.getLocationsByDimension({ dimension: 'C-137' }).subscribe(
-      response => console.log(response)
-    );
+    this.#locationHandlerStore.loadLocationsByDimension({ dimension: 'C-137' });
   }
 }
