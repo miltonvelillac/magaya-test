@@ -4,6 +4,7 @@ import { CharactersHandlerStore } from '@core/state/characters/handler/character
 import { CharacterModel } from '@shared/models/character.model';
 import { RegexUtils } from '@shared/utils/regex/regex.utils';
 import { NavigationServiceTsService } from '../navigation/navigation.service.ts.service';
+import { CharacterColumn } from '@shared/types/character-column.type';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,8 @@ import { NavigationServiceTsService } from '../navigation/navigation.service.ts.
 export class CharacterSearchHelperService {
   #charactersHandlerStore = inject(CharactersHandlerStore);
   #navigationServiceTsService = inject(NavigationServiceTsService);
+
+  displayedColumns: CharacterColumn[] = ['id', 'name', 'status', 'species', 'gender'];
 
   pageIndex = signal(0);
   pageSize = signal(10);

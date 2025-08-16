@@ -1,5 +1,6 @@
 <section class="search-table">
     <app-search-field
+        @fadeInOut
         [formField]="formField()"
         [idInput]="idInput()"
         [nameInput]="nameInput()"
@@ -12,15 +13,18 @@
         (onEnter)="onEnter.emit()"
         (onClick)="onClick.emit()"
     />
-    <app-table
-        [displayedColumns]="displayedColumns()"
-        [rows]="data()"
-        [length]="pageLength()"
-        [pageIndex]="pageIndex()"
-        [pageSize]="pageSize()"
-        [emptyDataMessage]="emptyDataMessage()"
-        (pageChange)="onPage.emit($event)"
-        (onRowClick)="onRowClick.emit($event)">
-    </app-table>
+    @if(this.showTable()) {
+        <app-table
+            @fadeInOut
+            [displayedColumns]="displayedColumns()"
+            [rows]="data()"
+            [length]="pageLength()"
+            [pageIndex]="pageIndex()"
+            [pageSize]="pageSize()"
+            [emptyDataMessage]="emptyDataMessage()"
+            (pageChange)="onPage.emit($event)"
+            (onRowClick)="onRowClick.emit($event)">
+        </app-table>
+    }
 </section>
-<app-global-spinner [isLoading]="isLoading()"/>
+<app-global-spinner @fadeInOut [isLoading]="isLoading()"/>

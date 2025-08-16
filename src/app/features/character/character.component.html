@@ -1,31 +1,33 @@
-<app-card>
-    <ng-container cardHeader>
-        <app-avatar class="card__avatar" [image]="getSelectedCharacter()?.image" [alt]="labels.altAvatar" id="avatarId"/>
-        <section class="card__title-section">
-            <h1 class="card__title">{{getSelectedCharacter()?.name}}</h1>
-            <app-chips [class]="statusClass()" [label]="getSelectedCharacter()?.status"/>
+<section class="character">
+    <app-card @fadeInOut>
+        <ng-container cardHeader>
+            <app-avatar class="card__avatar" [image]="getSelectedCharacter()?.image" [alt]="labels.altAvatar" id="avatarId"/>
+            <section class="card__title-section">
+                <h1 class="card__title">{{getSelectedCharacter()?.name}}</h1>
+                <app-chips [class]="statusClass()" [label]="getSelectedCharacter()?.status"/>
+            </section>
+        </ng-container>
+        <ng-container cardContent>
+            <section class="card__detail-section">
+            <section class="card__info">
+                <app-label [label]="labels.specie"/>
+                <app-chips [label]="getSelectedCharacter()?.species"/>
+            </section>
+            <section class="card__info">
+                <app-label [label]="labels.gender"/>
+                <app-chips [label]="getSelectedCharacter()?.gender"/>
+            </section>
+            <section class="card__info">
+                <app-label [label]="labels.origin"/>
+                <app-chips [label]="getSelectedCharacter()?.origin?.name"/>
+            </section>
+            <section class="card__info">
+                <app-label [label]="labels.location"/>
+                <app-chips [label]="getSelectedCharacter()?.location?.name" [isClickeble]="true" (click)="selectLocation()" />
+            </section>
         </section>
-    </ng-container>
-    <ng-container cardContent>
-        <section class="card__detail-section">
-        <section class="card__info">
-            <app-label [label]="labels.specie"/>
-            <app-chips [label]="getSelectedCharacter()?.species"/>
-        </section>
-        <section class="card__info">
-            <app-label [label]="labels.gender"/>
-            <app-chips [label]="getSelectedCharacter()?.gender"/>
-        </section>
-        <section class="card__info">
-            <app-label [label]="labels.origin"/>
-            <app-chips [label]="getSelectedCharacter()?.origin?.name"/>
-        </section>
-        <section class="card__info">
-            <app-label [label]="labels.location"/>
-            <app-chips [label]="getSelectedCharacter()?.location?.name" [isClickeble]="true" (click)="selectLocation()" />
-        </section>
-    </section>
-    </ng-container>
-
-</app-card>
+        </ng-container>
+    
+    </app-card>
+</section>
 <app-global-spinner [isLoading]="isLoading()"/>

@@ -6,7 +6,6 @@ import { LocationHandlerStore } from '@core/state/location/handler/location-hand
 import { TextConstant } from '@shared/constants/text.constant';
 import { CharacterModel } from '@shared/models/character.model';
 import { LocationModel } from '@shared/models/location.model';
-import { CharacterColumn } from '@shared/types/character-column.type';
 import { SnackBarService } from '@shared/ui/atoms/snack-bar/snack-bar.service';
 import { CharacterSearchHelperService } from '../character-search-helper/character-search-helper.service';
 
@@ -46,7 +45,7 @@ export class LocationHelperService {
     return characters;
   });
 
-  displayedColumns: CharacterColumn[] = ['id', 'name', 'status', 'species', 'gender'];
+  displayedColumns = this.#characterSearchHelperService.displayedColumns;
 
   getIdsToSearch(props: { characterIds: number[], indexFrom: number, indexTo: number }): number[] {
     return this.#characterSearchHelperService.getIdsToSearch(props);

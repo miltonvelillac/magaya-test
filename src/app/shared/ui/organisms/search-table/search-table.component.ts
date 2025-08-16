@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { PageEvent } from '@angular/material/paginator';
 import { GlobalSpinnerComponent } from '@shared/ui/atoms/global-spinner/global-spinner.component';
 import { SearchFieldComponent } from '@shared/ui/molecules/search-field/search-field.component';
@@ -16,7 +17,17 @@ import { TableComponent } from '@shared/ui/molecules/table/table.component';
   ],
   templateUrl: './search-table.component.html',
   styleUrl: './search-table.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('1000ms ease-out',
+          style({ opacity: 1 })
+        ),
+      ]),
+    ]),
+  ],
 })
 export class SearchTableComponent<T> {
   formField = input(new FormControl());
@@ -42,4 +53,6 @@ export class SearchTableComponent<T> {
   onClick = output<void>();
   onPage = output<PageEvent>();
   onRowClick = output<T>();
+
+  showTable = computed(() => this.data().length > 0 );
 }

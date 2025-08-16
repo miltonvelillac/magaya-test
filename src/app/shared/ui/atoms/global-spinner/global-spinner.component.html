@@ -1,5 +1,5 @@
-@if (isLoading()) {
-    <section class="container">
+@if (showSpinner()) {
+    <section @fadeInOut class="container">
         <mat-spinner class="container__spinner"></mat-spinner>
     </section>
 }

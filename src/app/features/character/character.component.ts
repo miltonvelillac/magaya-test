@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CharactersHandlerStore } from '@core/state/characters/handler/characters-handler.store';
@@ -23,7 +24,17 @@ import { CardComponent } from '@shared/ui/molecules/card/card.component';
   ],
   templateUrl: './character.component.html',
   styleUrl: './character.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('1500ms ease-out',
+          style({ opacity: 1 })
+        ),
+      ]),
+    ]),
+  ],
 })
 export class CharacterComponent {
   #charactersHandlerStore = inject(CharactersHandlerStore);
