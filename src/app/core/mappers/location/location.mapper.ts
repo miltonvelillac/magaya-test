@@ -10,9 +10,9 @@ import { PaginatedResponseModel } from '@shared/models/paginated-response.model'
 })
 export class LocationMapper {
 
-  getRequest(props: { dimension: string }): LocationApiRequestModel {
-    const { dimension } = props;
-    return { dimension }
+  getRequest(props: { dimension?: string, location?: string }): LocationApiRequestModel {
+    const { dimension, location } = props;
+    return { dimension, location }
   }
 
   getResponse(props: { apiResponse: any }): PaginatedResponseModel<LocationModel> {

@@ -7,6 +7,10 @@ export const routes: Routes = [
         loadComponent: () => import('@features/dimensions/dimensions.component').then(m => m.DimensionsComponent)
     },
     {
+        path: UrlsConstants.locations,
+        loadComponent: () => import('@features/locations/locations.component').then(m => m.LocationsComponent)
+    },
+    {
         path: UrlsConstants.character,
         loadComponent: () => import('@features/character/character.component').then(m => m.CharacterComponent)
     },

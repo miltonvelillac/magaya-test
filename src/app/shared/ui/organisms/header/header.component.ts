@@ -26,4 +26,8 @@ export class HeaderComponent {
   goToDimension(): void {
     this.#navigationServiceTsService.goToDimensions();
   }
+
+  goToLocations(): void {
+    this.#navigationServiceTsService.goToLocations();
+  }
 }

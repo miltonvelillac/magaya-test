@@ -1,4 +1,5 @@
 export interface LocationApiRequestModel {
-    dimension: string;
+    dimension?: string;
+    location?: string;
     page?: number;
 }

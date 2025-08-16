@@ -36,18 +36,21 @@ export const LocationReducerStore = signalStore(
     })
   ),
   withMethods((store, rickAndMortyApiService = inject(RickAndMortyApiService), locationMapper = inject(LocationMapper)) => ({
-    loadLocations(props: { dimension: string }): Observable<any> {
+    clearState(): void {
+      patchState(store, initialState);
+    },
+    loadLocations(props: { dimension?: string, location?: string }): Observable<any> {
       patchState(store, { isLoading: true });
-      const { dimension } = props;
-      const request = locationMapper.getRequest({ dimension });
-      return rickAndMortyApiService.getLocationsByDimension(request).pipe(
+      const { dimension, location } = props;
+      const request = locationMapper.getRequest({ dimension, location });
+      return rickAndMortyApiService.getLocationsByFilters(request).pipe(
         tap((resp) => {
           const response = locationMapper.getResponse({ apiResponse: resp });
           patchState(store, { isLoading: false, locations: response.results, error: undefined })
         }),
         catchError(err => 
           {
-            const error: ErrorModel = locationMapper.getErrorResponse({ error: err, dimesionSearch: dimension });
+            const error: ErrorModel = locationMapper.getErrorResponse({ error: err, dimesionSearch: dimension || '' });
             return throwError(() => patchState(store, { isLoading: false, locations: [], error }));
           }
         )

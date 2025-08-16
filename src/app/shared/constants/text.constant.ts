@@ -17,6 +17,15 @@ export const TextConstant = {
         snackbarErrorBtn: 'Close',
         initSearch: 'No search has been performed yet'
     },
+    location: {
+        labelInputField: 'Location',
+        labelSearchBtn: 'Search',
+        placeholderInputField: 'Search by location',
+        noDataFound: 'No Data Found',
+        noDataFoundErrorMessage: 'No Data Found for the location',
+        snackbarErrorBtn: 'Close',
+        initSearch: 'No search has been performed yet'
+    },
     header: {
         title: 'R&M Lookup',
         dimensionMenu: 'Dimensions',

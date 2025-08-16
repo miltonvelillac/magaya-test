@@ -2,20 +2,20 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, OnDestroy
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { CharacterHelperService } from '@core/services/character-helper/character-helper.service';
+import { NavigationServiceTsService } from '@core/services/navigation/navigation.service.ts.service';
 import { CharactersHandlerStore } from '@core/state/characters/handler/characters-handler.store';
 import { LocationHandlerStore } from '@core/state/location/handler/location-handler.store';
 import { TextConstant } from '@shared/constants/text.constant';
-import { DimensionsFormNamesEnum } from '@shared/enums/dimensions-form-names.enum';
+import { LocationsFormNamesEnum } from '@shared/enums/locations-form-names.enum';
+import { CharacterModel } from '@shared/models/character.model';
 import { CharacterColumn } from '@shared/types/character-column.type';
 import { GlobalSpinnerComponent } from '@shared/ui/atoms/global-spinner/global-spinner.component';
 import { SnackBarService } from '@shared/ui/atoms/snack-bar/snack-bar.service';
-import { TableComponent } from '@shared/ui/molecules/table/table.component';
 import { SearchFieldComponent } from '@shared/ui/molecules/search-field/search-field.component';
-import { CharacterModel } from '@shared/models/character.model';
-import { NavigationServiceTsService } from '@core/services/navigation/navigation.service.ts.service';
+import { TableComponent } from '@shared/ui/molecules/table/table.component';
 
 @Component({
-  selector: 'app-dimensions',
+  selector: 'app-locations',
   standalone: true,
   imports: [
     FormsModule,
@@ -24,11 +24,11 @@ import { NavigationServiceTsService } from '@core/services/navigation/navigation
     TableComponent,
     SearchFieldComponent
   ],
-  templateUrl: './dimensions.component.html',
-  styleUrl: './dimensions.component.scss',
+  templateUrl: './locations.component.html',
+  styleUrl: './locations.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DimensionsComponent implements OnDestroy {
+export class LocationsComponent implements OnDestroy {
   #locationHandlerStore = inject(LocationHandlerStore);
   #charactersHandlerStore = inject(CharactersHandlerStore);
   #characterHelperService = inject(CharacterHelperService);
@@ -43,10 +43,10 @@ export class DimensionsComponent implements OnDestroy {
   charactersLoading = this.#charactersHandlerStore.isLoading;
   charactersErrror = this.#charactersHandlerStore.error;
 
-  labels = TextConstant.dimension;
-  formNames = DimensionsFormNamesEnum;
+  labels = TextConstant.location;
+  formNames = LocationsFormNamesEnum;
   form = new FormGroup({
-    [this.formNames.dimension]: new FormControl('', [Validators.required])
+    [this.formNames.location]: new FormControl('', [Validators.required])
   });
 
   emptyDataMessage = signal(this.labels.initSearch);
@@ -89,9 +89,9 @@ export class DimensionsComponent implements OnDestroy {
     };
     this.#charactersHandlerStore.clearState();
     this.pageIndex.update(() => 0);
-    const { dimension } = this.form.value;
+    const { location } = this.form.value;
 
-    this.#locationHandlerStore.loadLocationsByFilters({ dimension: dimension || '' });
+    this.#locationHandlerStore.loadLocationsByFilters({ location: location || '' });
   }
 
   onPage(pageEvent: PageEvent): void {
@@ -136,4 +136,5 @@ export class DimensionsComponent implements OnDestroy {
       this.isLoading() ? this.form.disable() : this.form.enable();
     });
   }
+
 }

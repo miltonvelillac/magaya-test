@@ -8,6 +8,7 @@ import { ChipStylesEnum } from '@shared/enums/chip-styles.enum';
 import { CharacterModel } from '@shared/models/character.model';
 import { ChipsComponent } from '@shared/ui/atoms/chips/chips.component';
 import { DividerComponent } from '@shared/ui/atoms/divider/divider.component';
+import { GlobalSpinnerComponent } from '@shared/ui/atoms/global-spinner/global-spinner.component';
 import { LabelComponent } from '@shared/ui/atoms/label/label.component';
 import { SnackBarService } from '@shared/ui/atoms/snack-bar/snack-bar.service';
 
@@ -20,6 +21,7 @@ import { SnackBarService } from '@shared/ui/atoms/snack-bar/snack-bar.service';
     LabelComponent,
     ChipsComponent,
     DividerComponent,
+    GlobalSpinnerComponent
   ],
   templateUrl: './character.component.html',
   styleUrl: './character.component.scss',
@@ -34,6 +36,7 @@ export class CharacterComponent {
 
   id = signal<number | undefined>(undefined);
   selectedCharacter = this.#charactersHandlerStore.selectedCharacter;
+  isLoading = this.#charactersHandlerStore.isLoading;
 
   getSelectedCharacter = computed(() => this.selectedCharacter ? this.selectedCharacter() : {} as CharacterModel);
   statusClass = computed(() => {
@@ -69,6 +72,7 @@ export class CharacterComponent {
 
   selectLocation(): void {
     // TODO: goest to location
+    // const location = this.selectedCharacter()?.location.name;
   }
 
 }

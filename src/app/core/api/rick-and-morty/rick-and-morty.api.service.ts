@@ -39,11 +39,12 @@ export class RickAndMortyApiService {
     );
   }
 
-  getLocationsByDimension(request: LocationApiRequestModel): Observable<any> {
-    const { dimension, page } = request;
+  getLocationsByFilters(request: LocationApiRequestModel): Observable<any> {
+    const { dimension, location, page } = request;
     const params = new HttpParams({
       fromObject: {
-        dimension,
+        dimension: dimension || '',
+        location: location || '',
         ...(page ? { page } : {})
       }
     });

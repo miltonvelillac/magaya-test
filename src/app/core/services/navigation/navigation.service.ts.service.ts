@@ -19,4 +19,8 @@ export class NavigationServiceTsService {
     void this.#router.navigate([UrlsConstants.dimensions]);
   }
 
+  goToLocations(): void {
+    void this.#router.navigate([UrlsConstants.locations]);
+  }
+
 }

@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
+import { take } from 'rxjs';
 import { LocationReducerStore } from '../reducer/location-reducer.store';
-import { LocationApiRequestModel } from '@shared/models/location-api-request.model';
-import { Observable, take } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +12,13 @@ export class LocationHandlerStore {
   isLoading = this.#store.isLoading;
   error = this.#store.error;
 
-  loadLocationsByDimension(props: { dimension: string }): void {
-    const { dimension } = props;
-    this.#store.loadLocations({ dimension }).pipe(take(1)).subscribe();
+  clearState(): void {
+    this.#store.clearState();
+  }
+
+  loadLocationsByFilters(props: { dimension?: string, location?: string }): void {
+    const { dimension, location } = props;
+    this.#store.loadLocations({ dimension, location }).pipe(take(1)).subscribe();
   }
   
 }

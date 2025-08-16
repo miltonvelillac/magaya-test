@@ -11,7 +11,7 @@
             <app-icon icon="3d_rotation" />
             <span>{{labels.dimensionMenu}}</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="goToLocations()">
             <app-icon icon="location_on" />
             <span>{{labels.locationMenu}}</span>
         </button>

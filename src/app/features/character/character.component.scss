@@ -35,6 +35,8 @@
     &__avatar {
         width: 150px;
         height: 150px;
+        background-image: url('/assets/img/morty-smith.svg');
+        background-size: cover;
     }
 
     &__info {
@@ -42,4 +44,10 @@
         flex-direction: column;
         gap: 0.2rem;
     }
+}
+
+
+.example-header-image {
+  background-image: url('https://material.angular.dev/assets/img/examples/shiba1.jpg');
+  background-size: cover;
 }
