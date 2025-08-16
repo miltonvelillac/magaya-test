@@ -1,15 +1,13 @@
 @use '@angular/material' as mat;
 
-// 1) Define el tema (elige las paletas que quieras)
 $my-theme: mat.define-theme((
   color: (
-    theme-type: light,                 // o 'dark'
+    theme-type: dark,                 // or 'ligth'
     primary:   mat.$blue-palette,      // “primary”
     tertiary:  mat.$rose-palette,      // “tertiary”
   ),
 ));
 
-// 2) Aplica el tema a TODOS los componentes
 :root {
   @include mat.all-component-themes($my-theme);
 }

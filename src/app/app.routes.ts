@@ -3,7 +3,7 @@ import { UrlsConstants } from '@shared/constants/utls.constant';
 
 export const routes: Routes = [
     {
-        path: UrlsConstants.locations,
+        path: UrlsConstants.dimensions,
         loadComponent: () => import('@features/dimensions/dimensions.component').then(m => m.DimensionsComponent)
     },
     {
@@ -12,6 +12,6 @@ export const routes: Routes = [
     },
     {
         path: '**',
-        redirectTo: UrlsConstants.locations
+        redirectTo: UrlsConstants.dimensions
     }
 ];

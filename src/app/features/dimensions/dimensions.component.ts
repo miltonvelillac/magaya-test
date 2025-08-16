@@ -82,6 +82,7 @@ export class DimensionsComponent {
       this.form.markAllAsTouched();
       return
     };
+    this.#charactersHandlerStore.clearState();
     this.pageIndex.update(() => 0);
     const { dimension } = this.form.value;
 

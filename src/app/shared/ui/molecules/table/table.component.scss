@@ -8,9 +8,15 @@
   cursor: pointer;
 }
 .row--clickable:hover {
-  background-color: var(--mat-sys-surface-container-high);
+  background-color: var(--background-card);
 }
 .row--clickable:focus {
   outline: 1px solid var(--mat-sys-primary);
   outline-offset: -1px;
+}
+
+.mat-mdc-table {
+  width: 100%;
+  height: calc(100vh - 290px);;
+  overflow: auto;
 }

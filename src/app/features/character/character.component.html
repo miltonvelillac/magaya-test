@@ -6,6 +6,7 @@
         <app-chips [class]="statusClass()" [label]="getSelectedCharacter()?.status"/>
     </section>
   </mat-card-header>
+  <app-divider />
   <mat-card-content class="card__detail">
     <section class="card__detail-section">
         <section class="card__info">
@@ -22,24 +23,7 @@
         </section>
         <section class="card__info">
             <app-label [label]="labels.location"/>
-            <app-chips [label]="getSelectedCharacter()?.location?.name"/>
-        </section>
-    </section>
-    <section>
-        <h2>{{labels.episodeTitle}}</h2>
-        <section class="card__detail-section">
-            <section class="card__info">
-                <app-label [label]="labels.episodeName"/>
-                <app-chips [label]="getSelectedCharacter()?.species"/>
-            </section>
-            <section class="card__info">
-                <app-label [label]="labels.episodeDate"/>
-                <app-chips [label]="getSelectedCharacter()?.species"/>
-            </section>
-            <section class="card__info">
-                <app-label [label]="labels.episodeCode"/>
-                <app-chips [label]="getSelectedCharacter()?.species"/>
-            </section>
+            <app-chips [label]="getSelectedCharacter()?.location?.name" [isClickeble]="true" (click)="selectLocation()" />
         </section>
     </section>
   </mat-card-content>

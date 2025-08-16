@@ -33,5 +33,9 @@ export class CharactersHandlerStore {
     const { id } = props;
     this.#store.loadCharacterById({ id }).pipe(take(1)).subscribe();
   }
+
+  clearState(): void {
+    this.#store.clearState();
+  }
   
 }

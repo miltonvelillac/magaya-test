@@ -1,3 +1,6 @@
 .search-table {
     height: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }

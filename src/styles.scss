@@ -29,7 +29,7 @@ body {
   // Angular Material's system-level CSS variables. Learn more about these
   // variables at https://material.angular.dev/guide/system-variables
   background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
+  color: var(--text);
   font: var(--mat-sys-body-medium);
 
   // Reset the user agent margin.
@@ -46,20 +46,8 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   margin: 0;
-  font-size: 3rem;
+  font-size: 2rem;
 }
 h2 {
   margin: 0;
-  font-size: 2rem;
-}
-
-
-
-.app-snack-bar {
-  &--error{
-    @include mat.snack-bar-overrides((
-        button-color: var(--error),
-        container-color:  var(--error),
-      ));
-  }
 }

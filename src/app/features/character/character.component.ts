@@ -7,6 +7,7 @@ import { TextConstant } from '@shared/constants/text.constant';
 import { ChipStylesEnum } from '@shared/enums/chip-styles.enum';
 import { CharacterModel } from '@shared/models/character.model';
 import { ChipsComponent } from '@shared/ui/atoms/chips/chips.component';
+import { DividerComponent } from '@shared/ui/atoms/divider/divider.component';
 import { LabelComponent } from '@shared/ui/atoms/label/label.component';
 import { SnackBarService } from '@shared/ui/atoms/snack-bar/snack-bar.service';
 
@@ -17,8 +18,9 @@ import { SnackBarService } from '@shared/ui/atoms/snack-bar/snack-bar.service';
     MatCardModule,
     MatButtonModule,
     LabelComponent,
-    ChipsComponent,    
-],
+    ChipsComponent,
+    DividerComponent,
+  ],
   templateUrl: './character.component.html',
   styleUrl: './character.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -33,9 +35,9 @@ export class CharacterComponent {
   id = signal<number | undefined>(undefined);
   selectedCharacter = this.#charactersHandlerStore.selectedCharacter;
 
-  getSelectedCharacter = computed(() => this.selectedCharacter ? this.selectedCharacter() : {} as CharacterModel );
+  getSelectedCharacter = computed(() => this.selectedCharacter ? this.selectedCharacter() : {} as CharacterModel);
   statusClass = computed(() => {
-    if(!this.selectedCharacter) return '';
+    if (!this.selectedCharacter) return '';
     switch (this.selectedCharacter()?.status) {
       case 'Alive':
         return ChipStylesEnum.success;
@@ -63,6 +65,10 @@ export class CharacterComponent {
   loadCharacterById(): void {
     if (!this.id) return;
     this.#charactersHandlerStore.loadCharacterById({ id: this.id() || 0 });
+  }
+
+  selectLocation(): void {
+    // TODO: goest to location
   }
 
 }

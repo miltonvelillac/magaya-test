@@ -40,6 +40,9 @@ export const CharactersReducerStore = signalStore(
     })
   ),
   withMethods((store, rickAndMortyApiService = inject(RickAndMortyApiService), charactersMapper = inject(CharactersMapper)) => ({
+    clearState(): void {
+      patchState(store, initialState);
+    },
     loadCharactersByIds(props: { ids: number[], indexFrom: number }): Observable<any> {
       patchState(store, { isLoading: true });
       const { ids, indexFrom } = props;
@@ -77,7 +80,7 @@ export const CharactersReducerStore = signalStore(
       const { id } = props;
       const currentCharacters = untracked(() => store.characters());
 
-      const selectedCharacter = currentCharacters.find(char => char.id === id);
+      const selectedCharacter = currentCharacters.find(char => char?.id === id);
       if (selectedCharacter) {
         patchState(store, { selectedCharacter });
         return of();

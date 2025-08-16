@@ -1,13 +1,12 @@
-<table mat-table [dataSource]="rows()">
+<mat-table [dataSource]="rows()" class="table">
   @for (col of displayedColumns(); track $index) {
     <ng-container [matColumnDef]="col">
-      <th mat-header-cell *matHeaderCellDef>{{ col }}</th>
-      <td mat-cell *matCellDef="let element">{{ element ? element[col] : '' }}</td>
+      <mat-header-cell *matHeaderCellDef>{{ col }}</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{ element ? element[col] : '' }}</mat-cell>
     </ng-container>
   }
-  <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
-  <tr
-    mat-row
+  <mat-header-row *matHeaderRowDef="displayedColumns()"></mat-header-row>
+  <mat-row
     *matRowDef="let row; columns: displayedColumns();"
     class="row--clickable"
     tabindex="0"
@@ -16,14 +15,14 @@
     (keydown.enter)="onClick(row)"
     (keydown.space)="onClick(row)"
     [attr.aria-label]="'Abrir detalle de ' + (row?.name ?? '')"
-  ></tr>
+  ></mat-row>
 
   <tr *matNoDataRow>
     <td [attr.colspan]="displayedColumns().length">
       <p class="table__no-data">{{emptyDataMessage()}}</p>      
     </td>
   </tr>
-</table>
+</mat-table>
 
 @if (hasPagination()) {
   <mat-paginator

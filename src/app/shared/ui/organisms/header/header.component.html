@@ -1,0 +1,23 @@
+<mat-toolbar class="rm-toolbar">
+    <img class="rm-toolbar__art" src="assets/img/header_rm_portal.svg" alt="" aria-hidden="true" />
+    <span class="rm-toolbar__title">{{labels.title}}</span>
+    <span class="spacer"></span>
+
+    <button matIconButton [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <app-icon icon="menu" />
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="goToDimension()">
+            <app-icon icon="3d_rotation" />
+            <span>{{labels.dimensionMenu}}</span>
+        </button>
+        <button mat-menu-item>
+            <app-icon icon="location_on" />
+            <span>{{labels.locationMenu}}</span>
+        </button>
+        <button mat-menu-item>
+            <app-icon icon="tv" />
+            <span>{{labels.episodeMenu}}</span>
+        </button>
+    </mat-menu>
+</mat-toolbar>

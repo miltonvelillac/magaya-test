@@ -1,4 +1,13 @@
 export const TextConstant = {
+    character: {
+        noDataFoundErrorMessage: 'No Data found or the character ID',
+        idMissing: 'The Character ID is a required value',
+        snackbarErrorBtn: 'Close',
+        specie: 'Specie',
+        origin: 'Origin',
+        gender: 'Gender',
+        location: 'Location',
+    },
     dimension: {
         labelInputField: 'Dimension',
         labelSearchBtn: 'Search',
@@ -8,17 +17,10 @@ export const TextConstant = {
         snackbarErrorBtn: 'Close',
         initSearch: 'No search has been performed yet'
     },
-    character: {
-        noDataFoundErrorMessage: 'No Data found or the character ID',
-        idMissing: 'The Character ID is a required value',
-        snackbarErrorBtn: 'Close',
-        specie: 'Specie',
-        origin: 'Origin',
-        gender: 'Gender',
-        location: 'Location',
-        episodeTitle: 'Eposodes',
-        episodeName: 'Name',
-        episodeDate: 'Air Date',
-        episodeCode: 'Code',
+    header: {
+        title: 'R&M Lookup',
+        dimensionMenu: 'Dimensions',
+        locationMenu: 'Locations',
+        episodeMenu: 'Episodes'
     }
 }
