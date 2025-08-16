@@ -1,0 +1,26 @@
+<section class="search-table">
+    <app-search-field
+        [formField]="formField()"
+        [idInput]="idInput()"
+        [nameInput]="nameInput()"
+        [labelInput]="labelInput()"
+        [placeholderInput]="placeholderInput()"
+        [focus]="focus()"
+        [idBtn]="idBtn()"
+        [labelBtn]="labelBtn()"
+        [disabledBtn]="disabledBtn()"
+        (onEnter)="onEnter.emit()"
+        (onClick)="onClick.emit()"
+    />
+    <app-table
+        [displayedColumns]="displayedColumns()"
+        [rows]="data()"
+        [length]="pageLength()"
+        [pageIndex]="pageIndex()"
+        [pageSize]="pageSize()"
+        [emptyDataMessage]="emptyDataMessage()"
+        (pageChange)="onPage.emit($event)"
+        (onRowClick)="onRowClick.emit($event)">
+    </app-table>
+</section>
+<app-global-spinner [isLoading]="isLoading()"/>

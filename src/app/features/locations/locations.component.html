@@ -1,26 +1,22 @@
-<section class="search-table">
-    <app-search-field
-        [formField]="form.controls[formNames.location]"
-        idInput="locationSeachField"
-        nameInput="location"
-        [labelInput]="labels.labelInputField"
-        [placeholderInput]="labels.placeholderInputField"
-        [focus]="true"
-        idBtn="locationSearchBtn"
-        [labelBtn]="labels.labelSearchBtn"
-        [disabledBtn]="disableSearchBtn()"
-        (onEnter)="search()"
-        (onClick)="search()"
-    />
-    <app-table
-        [displayedColumns]="displayedColumns"
-        [rows]="charactersData()"
-        [length]="pageLength()"
-        [pageIndex]="pageIndex()"
-        [pageSize]="pageSize()"
-        [emptyDataMessage]="emptyDataMessage()"
-        (pageChange)="onPage($event)"
-        (onRowClick)="onRowClick($event)">
-    </app-table>
-</section>
-<app-global-spinner [isLoading]="isLoading()"/>
+<app-search-table
+    [formField]="form.controls[formNames.location]"
+    idInput="locationSeachField"
+    nameInput="location"
+    [labelInput]="labels.labelInputField"
+    [placeholderInput]="labels.placeholderInputField"
+    idBtn="locationSearchBtn"
+    [labelBtn]="labels.labelSearchBtn"
+    [disabledBtn]="disableSearchBtn()"
+
+    [displayedColumns]="displayedColumns"
+    [data]="charactersData()"
+    [pageIndex]="pageIndex()"
+    [pageLength]="pageLength()"
+    [pageSize]="pageSize()"
+    [emptyDataMessage]="emptyDataMessage()"
+
+    (onEnter)="search()"
+    (onClick)="search()"
+    (onPage)="onPage($event)"
+    (onRowClick)="onRowClick($event)"
+/>

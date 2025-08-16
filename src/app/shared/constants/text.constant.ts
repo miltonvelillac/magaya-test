@@ -27,6 +27,9 @@ export const TextConstant = {
         snackbarErrorBtn: 'Close',
         initSearch: 'No search has been performed yet'
     },
+    commonDimensionLocation: {
+        initSearch: 'No search has been performed yet'
+    },
     header: {
         title: 'R&M Lookup',
         dimensionMenu: 'Dimensions',

@@ -1,18 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, OnDestroy, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { CharacterHelperService } from '@core/services/character-helper/character-helper.service';
-import { CharactersHandlerStore } from '@core/state/characters/handler/characters-handler.store';
 import { LocationHandlerStore } from '@core/state/location/handler/location-handler.store';
+import { SearchTableComponent } from '@shared/ui/organisms/search-table/search-table.component';
 import { TextConstant } from '@shared/constants/text.constant';
 import { DimensionsFormNamesEnum } from '@shared/enums/dimensions-form-names.enum';
-import { CharacterColumn } from '@shared/types/character-column.type';
-import { GlobalSpinnerComponent } from '@shared/ui/atoms/global-spinner/global-spinner.component';
-import { SnackBarService } from '@shared/ui/atoms/snack-bar/snack-bar.service';
-import { TableComponent } from '@shared/ui/molecules/table/table.component';
-import { SearchFieldComponent } from '@shared/ui/molecules/search-field/search-field.component';
 import { CharacterModel } from '@shared/models/character.model';
-import { NavigationServiceTsService } from '@core/services/navigation/navigation.service.ts.service';
 
 @Component({
   selector: 'app-dimensions',
@@ -20,9 +14,7 @@ import { NavigationServiceTsService } from '@core/services/navigation/navigation
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    GlobalSpinnerComponent,
-    TableComponent,
-    SearchFieldComponent
+    SearchTableComponent
   ],
   templateUrl: './dimensions.component.html',
   styleUrl: './dimensions.component.scss',
@@ -30,18 +22,15 @@ import { NavigationServiceTsService } from '@core/services/navigation/navigation
 })
 export class DimensionsComponent implements OnDestroy {
   #locationHandlerStore = inject(LocationHandlerStore);
-  #charactersHandlerStore = inject(CharactersHandlerStore);
   #characterHelperService = inject(CharacterHelperService);
-  #navigationServiceTsService = inject(NavigationServiceTsService);
-  #snackBarService = inject(SnackBarService);
 
-  locations = this.#locationHandlerStore.locations;
-  locationLoading = this.#locationHandlerStore.isLoading;
-  locationErrror = this.#locationHandlerStore.error;
+  locations = this.#characterHelperService.locations;
+  locationLoading = this.#characterHelperService.locationLoading;
+  locationErrror = this.#characterHelperService.locationErrror;
 
-  characters = this.#charactersHandlerStore.characters;
-  charactersLoading = this.#charactersHandlerStore.isLoading;
-  charactersErrror = this.#charactersHandlerStore.error;
+  characters = this.#characterHelperService.characters;
+  charactersLoading = this.#characterHelperService.charactersLoading;
+  charactersErrror = this.#characterHelperService.charactersErrror;
 
   labels = TextConstant.dimension;
   formNames = DimensionsFormNamesEnum;
@@ -49,23 +38,14 @@ export class DimensionsComponent implements OnDestroy {
     [this.formNames.dimension]: new FormControl('', [Validators.required])
   });
 
-  emptyDataMessage = signal(this.labels.initSearch);
-  pageIndex = signal(0);
-  pageSize = signal(10);
-  pageLength = signal(0);
-  displayedColumns: CharacterColumn[] = ['id', 'name', 'status', 'species', 'gender'];
+  emptyDataMessage = this.#characterHelperService.emptyDataMessage;
+  pageIndex = this.#characterHelperService.pageIndex;
+  pageSize = this.#characterHelperService.pageSize;
+  pageLength = this.#characterHelperService.pageLength;
+  displayedColumns = this.#characterHelperService.displayedColumns;
 
-  charactersData = computed(() => {
-    const characters = this.#characterHelperService.getCharactersToShow(
-      {
-        characters: this.characters(),
-        pageIndex: this.pageIndex(),
-        pageSize: this.pageSize()
-      }
-    );
-    return characters;
-  });
-  isLoading = computed(() => this.locationLoading() || this.charactersLoading());
+  charactersData = this.#characterHelperService.charactersData;
+  isLoading = this.#characterHelperService.isLoading;
 
   constructor() {
     this.loadCharactersByIds();
@@ -74,12 +54,11 @@ export class DimensionsComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.#charactersHandlerStore.clearState();
-    this.#locationHandlerStore.clearState();
+    this.#characterHelperService.onDestroy();
   }
 
   disableSearchBtn(): boolean {
-    return this.isLoading();
+    return this.#characterHelperService.disableSearchBtn();
   }
 
   search(): void {
@@ -87,53 +66,31 @@ export class DimensionsComponent implements OnDestroy {
       this.form.markAllAsTouched();
       return
     };
-    this.#charactersHandlerStore.clearState();
-    this.pageIndex.update(() => 0);
-    const { dimension } = this.form.value;
+    this.#characterHelperService.searchLocation();
 
+    const { dimension } = this.form.value;
     this.#locationHandlerStore.loadLocationsByFilters({ dimension: dimension || '' });
   }
 
   onPage(pageEvent: PageEvent): void {
-    this.pageIndex.update(() => pageEvent.pageIndex);
-    this.pageSize.update(() => pageEvent.pageSize);
+    this.#characterHelperService.onPage(pageEvent);
   }
 
   onRowClick(row: CharacterModel): void {
-    this.#navigationServiceTsService.goToCharacters({ id: row.id });
+    this.#characterHelperService.onRowClick(row);
   }
 
   private loadCharactersByIds(): void {
-    effect(() => {
-      const locations = this.locations();
-      const characterIds = this.#characterHelperService.getCharacterIds({ locations });
-
-      this.#charactersHandlerStore.setCharacterIds({ ids: characterIds });
-      this.pageLength.update(() => characterIds?.length || 0);
-
-      if (characterIds?.length > 0) {
-        const { indexFrom, indexTo } = this.#characterHelperService.getTableIndexes({ pageSize: this.pageSize(), pageIndex: this.pageIndex() });
-        const idsToSeach = this.#characterHelperService.getIdsToSearch({ characterIds, indexFrom, indexTo });
-        this.#charactersHandlerStore.loadCharactersByIds({ ids: idsToSeach, indexFrom });
-      } else {
-        this.#charactersHandlerStore.setCharacters({ characters: [] });
-      }
-    });
+    effect(() => this.#characterHelperService.loadCharactersByIds({ locations: this.locations() }));
   }
 
   private loadLocationsError(): void {
-    effect(() => {
-      const errorMessage = this.locationErrror ? this.locationErrror() : undefined;
-      if(!errorMessage) return;
-      console.error(errorMessage?.messageFromApi);
-      this.emptyDataMessage.update(() => this.labels.noDataFound);
-      this.#snackBarService.openErrorSnackBar({ message: errorMessage?.message || '', actionButtonText: this.labels.snackbarErrorBtn });
-    })
+    effect(() => this.#characterHelperService.loadLocationsError(
+      { noDataFound: this.labels.noDataFound, snackbarErrorBtn: this.labels.snackbarErrorBtn }
+    ));
   };
 
   private setDisableForm(): void {
-    effect(() => {
-      this.isLoading() ? this.form.disable() : this.form.enable();
-    });
+    effect(() => this.#characterHelperService.setDisableForm({ form: this.form }));
   }
 }
