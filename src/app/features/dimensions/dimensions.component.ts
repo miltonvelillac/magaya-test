@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
-import { CharacterHelperService } from '@core/services/character-helper/character-helper.service';
+import { LocationHelperService } from '@core/services/location-helper/location-helper.service';
 import { LocationHandlerStore } from '@core/state/location/handler/location-handler.store';
 import { SearchTableComponent } from '@shared/ui/organisms/search-table/search-table.component';
 import { TextConstant } from '@shared/constants/text.constant';
@@ -22,7 +22,7 @@ import { CharacterModel } from '@shared/models/character.model';
 })
 export class DimensionsComponent implements OnDestroy {
   #locationHandlerStore = inject(LocationHandlerStore);
-  #characterHelperService = inject(CharacterHelperService);
+  #characterHelperService = inject(LocationHelperService);
 
   locations = this.#characterHelperService.locations;
   locationLoading = this.#characterHelperService.locationLoading;

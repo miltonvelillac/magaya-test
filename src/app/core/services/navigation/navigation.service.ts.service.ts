@@ -19,6 +19,10 @@ export class NavigationServiceTsService {
     void this.#router.navigate([UrlsConstants.dimensions]);
   }
 
+  goToEpisodes(): void {
+    void this.#router.navigate([UrlsConstants.episodes]);
+  }
+
   goToLocations(): void {
     void this.#router.navigate([UrlsConstants.locations]);
   }

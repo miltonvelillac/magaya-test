@@ -4,6 +4,7 @@ import { CharacterApiRequestModel } from '@shared/models/character-api-request.m
 import { LocationApiRequestModel } from '@shared/models/location-api-request.model';
 import { Observable } from 'rxjs';
 import { environment } from '../../env/environment';
+import { EpisodApiRequestModel } from '@shared/models/episode-api-request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -30,12 +31,17 @@ export class RickAndMortyApiService {
     );
   }
 
-  getEpisodes(request: CharacterApiRequestModel): Observable<any> {
-    const { ids } = request;
-    const idsParams = ids?.join(',') || '';
+  getEpisodes(request: EpisodApiRequestModel): Observable<any> {
+    const { name } = request;
+    const params = new HttpParams({
+      fromObject: {
+        name
+      }
+    });
 
     return this.http.get(
-      `${this.baseUrl}/episode/${idsParams}`
+      `${this.baseUrl}/episode`,
+      { params }
     );
   }
 

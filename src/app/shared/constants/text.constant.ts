@@ -18,6 +18,15 @@ export const TextConstant = {
         snackbarErrorBtn: 'Close',
         initSearch: 'No search has been performed yet'
     },
+    episodes: {
+        labelInputField: 'Episode',
+        labelSearchBtn: 'Search',
+        placeholderInputField: 'Search by episode',
+        noDataFound: 'No Data Found',
+        noDataFoundErrorMessage: 'No Data Found for the episode',
+        snackbarErrorBtn: 'Close',
+        initSearch: 'No search has been performed yet'
+    },
     location: {
         labelInputField: 'Location',
         labelSearchBtn: 'Search',
@@ -27,7 +36,7 @@ export const TextConstant = {
         snackbarErrorBtn: 'Close',
         initSearch: 'No search has been performed yet'
     },
-    commonDimensionLocation: {
+    tableSearch: {
         initSearch: 'No search has been performed yet'
     },
     header: {

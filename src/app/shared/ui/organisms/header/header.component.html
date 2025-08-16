@@ -15,7 +15,7 @@
             <app-icon icon="location_on" />
             <span>{{labels.locationMenu}}</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="goToEpisodes()">
             <app-icon icon="tv" />
             <span>{{labels.episodeMenu}}</span>
         </button>

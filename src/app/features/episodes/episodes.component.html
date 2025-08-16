@@ -1,0 +1,22 @@
+<app-search-table
+    [formField]="form.controls[formNames.episodeName]"
+    idInput="episodeSeachField"
+    nameInput="episode"
+    [labelInput]="labels.labelInputField"
+    [placeholderInput]="labels.placeholderInputField"
+    idBtn="episodeSearchBtn"
+    [labelBtn]="labels.labelSearchBtn"
+    [disabledBtn]="disableSearchBtn()"
+
+    [displayedColumns]="displayedColumns"
+    [data]="charactersData()"
+    [pageIndex]="pageIndex()"
+    [pageLength]="pageLength()"
+    [pageSize]="pageSize()"
+    [emptyDataMessage]="emptyDataMessage()"
+
+    (onEnter)="search()"
+    (onClick)="search()"
+    (onPage)="onPage($event)"
+    (onRowClick)="onRowClick($event)"
+/>

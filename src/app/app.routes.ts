@@ -15,6 +15,10 @@ export const routes: Routes = [
         loadComponent: () => import('@features/character/character.component').then(m => m.CharacterComponent)
     },
     {
+        path: UrlsConstants.episodes,
+        loadComponent: () => import('@features/episodes/episodes.component').then(m => m.EpisodesComponent)
+    },
+    {
         path: '**',
         redirectTo: UrlsConstants.dimensions
     }
