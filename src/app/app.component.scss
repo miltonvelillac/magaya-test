@@ -1,5 +1,14 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    background: var(--background);
+    height: inherit;
+}
+
 .main {
+    width: 100%;
     max-width: 1200px;
-    margin: auto;
-    margin-top: 1rem;
+    margin: 0 auto;
+    padding-top: 1rem;
+    height: inherit;
 }

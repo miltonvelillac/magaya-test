@@ -6,7 +6,17 @@
     </ng-container>
   }
   <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns();"></tr>
+  <tr
+    mat-row
+    *matRowDef="let row; columns: displayedColumns();"
+    class="row--clickable"
+    tabindex="0"
+    role="button"
+    (click)="onClick(row)"
+    (keydown.enter)="onClick(row)"
+    (keydown.space)="onClick(row)"
+    [attr.aria-label]="'Abrir detalle de ' + (row?.name ?? '')"
+  ></tr>
 
   <tr *matNoDataRow>
     <td [attr.colspan]="displayedColumns().length">

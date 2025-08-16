@@ -1,4 +1,4 @@
-<section>
+<section class="search-table">
     <app-search-field
         [formField]="form.controls[formNames.dimension]"
         idInput="dimensionSeachField"
@@ -19,7 +19,8 @@
         [pageIndex]="pageIndex()"
         [pageSize]="pageSize()"
         [emptyDataMessage]="emptyDataMessage()"
-        (pageChange)="onPage($event)">
+        (pageChange)="onPage($event)"
+        (onRowClick)="onRowClick($event)">
     </app-table>
 </section>
 <app-global-spinner [isLoading]="isLoading()"/>

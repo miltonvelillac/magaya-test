@@ -7,6 +7,10 @@ export const routes: Routes = [
         loadComponent: () => import('@features/dimensions/dimensions.component').then(m => m.DimensionsComponent)
     },
     {
+        path: UrlsConstants.character,
+        loadComponent: () => import('@features/character/character.component').then(m => m.CharacterComponent)
+    },
+    {
         path: '**',
         redirectTo: UrlsConstants.locations
     }

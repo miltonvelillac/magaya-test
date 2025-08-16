@@ -3,3 +3,14 @@
         text-align: center;
     }
 }
+
+.row--clickable {
+  cursor: pointer;
+}
+.row--clickable:hover {
+  background-color: var(--mat-sys-surface-container-high);
+}
+.row--clickable:focus {
+  outline: 1px solid var(--mat-sys-primary);
+  outline-offset: -1px;
+}

@@ -11,6 +11,8 @@ import { GlobalSpinnerComponent } from '@shared/ui/atoms/global-spinner/global-s
 import { SnackBarService } from '@shared/ui/atoms/snack-bar/snack-bar.service';
 import { TableComponent } from '@shared/ui/molecules/table/table.component';
 import { SearchFieldComponent } from '@shared/ui/molecules/search-field/search-field.component';
+import { CharacterModel } from '@shared/models/character.model';
+import { NavigationServiceTsService } from '@core/services/navigation/navigation.service.ts.service';
 
 @Component({
   selector: 'app-dimensions',
@@ -30,6 +32,7 @@ export class DimensionsComponent {
   #locationHandlerStore = inject(LocationHandlerStore);
   #charactersHandlerStore = inject(CharactersHandlerStore);
   #characterHelperService = inject(CharacterHelperService);
+  #navigationServiceTsService = inject(NavigationServiceTsService);
   #snackBarService = inject(SnackBarService);
 
   locations = this.#locationHandlerStore.locations;
@@ -79,14 +82,20 @@ export class DimensionsComponent {
       this.form.markAllAsTouched();
       return
     };
+    this.pageIndex.update(() => 0);
     const { dimension } = this.form.value;
 
     this.#locationHandlerStore.loadLocationsByDimension({ dimension: dimension || '' });
   }
 
-  onPage(e: PageEvent) {
-    this.pageIndex.update(() => e.pageIndex);
-    this.pageSize.update(() => e.pageSize);
+  onPage(pageEvent: PageEvent): void {
+    this.pageIndex.update(() => pageEvent.pageIndex);
+    this.pageSize.update(() => pageEvent.pageSize);
+  }
+
+  onRowClick(row: CharacterModel): void {
+    console.log(row)
+    this.#navigationServiceTsService.goToCharacters({ id: row.id });
   }
 
   private loadCharactersByIds(): void {

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
+import { TextConstant } from '@shared/constants/text.constant';
 import { CharacterApiRequestModel } from '@shared/models/character-api-request.model';
 import { CharacterModel } from '@shared/models/character.model';
+import { ErrorModel } from '@shared/models/error.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,20 +15,24 @@ export class CharactersMapper {
   }
 
   getResponseByCharacterIds(response: any[]): CharacterModel[] {
-    return response?.map(resp => ({
-      id: resp.id,
-      name: resp.name,
-      status: resp.status,
-      species: resp.species,
-      gender: resp.gender,
-      origin: resp.origin,
-      location: resp.location,
-      image: resp.image,
-      episode: resp.episode,
-      url: resp.url,
-      created: resp.created,
-      type: resp.type,
-    })) || [];
+    return response?.map(resp => this.getResponseByOneCharacterId(resp)) || [];
+  }
+
+  getResponseByOneCharacterId(response: any): CharacterModel {
+    return {
+      id: response.id,
+      name: response.name,
+      status: response.status,
+      species: response.species,
+      gender: response.gender,
+      origin: response.origin,
+      location: response.location,
+      image: response.image,
+      episode: response.episode,
+      url: response.url,
+      created: response.created,
+      type: response.type,
+    };
   }
 
   /**
@@ -39,6 +45,13 @@ export class CharactersMapper {
 
     const charact: CharacterModel[] = [...currentCharacters];
     let index = indexFrom;
+    let indexTo = charactersFromApi.length + indexFrom;
+
+    for (let i = indexFrom; i < indexTo; i++) {
+      const element = currentCharacters[i];
+      if(!!element) index++;
+    }
+
     charactersFromApi.forEach(c => {
       charact[index++] = c;
     });
@@ -65,4 +78,11 @@ export class CharactersMapper {
 
     return idsToSearch;
   }
+
+  getErrorResponse(props: { error: any, characterSearchIds: number[] }): ErrorModel {
+      const { error, characterSearchIds } = props;
+      const errorMessage = error?.error?.error;
+      const message = `${TextConstant.character.noDataFoundErrorMessage} ${ characterSearchIds?.join(', ') }`;
+      return { messageFromApi: errorMessage, message };
+    }
 }

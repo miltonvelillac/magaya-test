@@ -1,0 +1,43 @@
+.card {
+  background-color: var(--background-card);
+  color: var(--text);
+
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  &__detail {
+    display: flex;
+    gap: 2rem;
+  }
+
+  &__detail-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  &__title-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  &__subtitle {
+    color: var(--text);
+    font-weight: 400;
+  }
+  &__avatar {
+    width: 150px;
+    height: 150px;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+}

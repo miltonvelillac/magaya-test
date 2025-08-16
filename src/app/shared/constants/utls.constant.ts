@@ -1,3 +1,4 @@
 export const UrlsConstants = {
-    locations: 'locations'
+    locations: 'locations',
+    character: 'character'
 }

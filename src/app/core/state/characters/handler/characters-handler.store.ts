@@ -10,6 +10,7 @@ export class CharactersHandlerStore {
   #store = inject(CharactersReducerStore);
 
   characters = this.#store.characters;
+  selectedCharacter = this.#store.selectedCharacter;
   isLoading = this.#store.isLoading;
   error = this.#store.error;
 
@@ -26,6 +27,11 @@ export class CharactersHandlerStore {
   setCharacterIds(props: { ids: number[] }): void {
     const { ids } = props;
     this.#store.setCharacterIds({ ids });
+  }
+
+  loadCharacterById(props: { id: number }): void {
+    const { id } = props;
+    this.#store.loadCharacterById({ id }).pipe(take(1)).subscribe();
   }
   
 }

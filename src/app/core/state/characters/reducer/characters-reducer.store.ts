@@ -16,12 +16,14 @@ type CharactersState = {
   characterIds: number[];
   characters: CharacterModel[];
   isLoading: boolean;
+  selectedCharacter?: CharacterModel;
   error?: ErrorModel;
 };
 
 const initialState: CharactersState = {
   characterIds: [],
   characters: [],
+  selectedCharacter: undefined,
   isLoading: false,
   error: undefined,
 };
@@ -41,11 +43,11 @@ export const CharactersReducerStore = signalStore(
     loadCharactersByIds(props: { ids: number[], indexFrom: number }): Observable<any> {
       patchState(store, { isLoading: true });
       const { ids, indexFrom } = props;
-      const currentCharacters = untracked(() => store.characters());      
+      const currentCharacters = untracked(() => store.characters());
       const idsToSearch: number[] = charactersMapper.getIdsToSearch({ currentCharacters, characterIds: ids });
-      
+
       // NOTE: Since the data shouldn't change frequently, the UI only calls the API when it doesn't have the data.
-      if(idsToSearch.length === 0) {
+      if (idsToSearch.length === 0) {
         patchState(store, { isLoading: false, error: undefined })
         return of();
       }
@@ -57,7 +59,10 @@ export const CharactersReducerStore = signalStore(
           const characters = charactersMapper.getCharactersByIndex({ currentCharacters, charactersFromApi: response, indexFrom });
           patchState(store, { isLoading: false, characters, error: undefined })
         }),
-        catchError(error => throwError(() => patchState(store, { isLoading: false, characters: [], error: { message: '' } })))
+        catchError(err => {
+          const error: ErrorModel = charactersMapper.getErrorResponse({ error: err, characterSearchIds: ids });
+          return throwError(() => patchState(store, { isLoading: false, selectedCharacter: undefined, error }));
+        })
       );
     },
     setCharacters(props: { characters: CharacterModel[] }): void {
@@ -67,6 +72,31 @@ export const CharactersReducerStore = signalStore(
     setCharacterIds(props: { ids: number[] }): void {
       const { ids } = props;
       patchState(store, { characterIds: ids })
+    },
+    loadCharacterById(props: { id: number }): Observable<any> {
+      const { id } = props;
+      const currentCharacters = untracked(() => store.characters());
+
+      const selectedCharacter = currentCharacters.find(char => char.id === id);
+      if (selectedCharacter) {
+        patchState(store, { selectedCharacter });
+        return of();
+      }
+      else {
+        patchState(store, { isLoading: true });
+        const request = charactersMapper.getRequest({ ids: [id] });
+        return rickAndMortyApiService.getCharacters(request)
+          .pipe(
+            tap((resp) => {
+              const selectedCharacterFromApi = charactersMapper.getResponseByOneCharacterId(resp);
+              patchState(store, { isLoading: false, selectedCharacter: selectedCharacterFromApi, error: undefined })
+            }),
+            catchError(err => {
+              const error: ErrorModel = charactersMapper.getErrorResponse({ error: err, characterSearchIds: [id] });
+              return throwError(() => patchState(store, { isLoading: false, selectedCharacter: undefined, error }));
+            })
+          );
+      }
     }
   }))
 );

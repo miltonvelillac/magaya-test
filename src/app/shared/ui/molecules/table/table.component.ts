@@ -23,8 +23,13 @@ export class TableComponent<T> {
   emptyDataMessage = input('');
 
   pageChange = output<PageEvent>();
+  onRowClick = output<T>();
 
-  onPage(e: PageEvent) {
-    this.pageChange.emit(e);
+  onPage(pageEvent: PageEvent): void {
+    this.pageChange.emit(pageEvent);
+  }
+
+  onClick(row: T): void {
+    this.onRowClick.emit(row);
   }
 }

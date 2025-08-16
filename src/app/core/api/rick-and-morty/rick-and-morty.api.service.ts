@@ -30,6 +30,15 @@ export class RickAndMortyApiService {
     );
   }
 
+  getEpisodes(request: CharacterApiRequestModel): Observable<any> {
+    const { ids } = request;
+    const idsParams = ids?.join(',') || '';
+
+    return this.http.get(
+      `${this.baseUrl}/episode/${idsParams}`
+    );
+  }
+
   getLocationsByDimension(request: LocationApiRequestModel): Observable<any> {
     const { dimension, page } = request;
     const params = new HttpParams({

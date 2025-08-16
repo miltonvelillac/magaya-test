@@ -5,7 +5,8 @@
 // Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
-@use "assets/styles/colors" as colors;
+@use 'assets/styles/theme' as *;
+@use 'assets/styles/colors' as *;
 
 html {
   @include mat.theme((
@@ -38,6 +39,19 @@ body {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+h1, h2, h3, h4, h5, h6 {
+  color: var(--title);
+  font-weight: 400;
+}
+
+h1 {
+  margin: 0;
+  font-size: 3rem;
+}
+h2 {
+  margin: 0;
+  font-size: 2rem;
+}
 
 
 

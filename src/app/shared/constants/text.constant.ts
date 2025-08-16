@@ -7,5 +7,18 @@ export const TextConstant = {
         noDataFoundErrorMessage: 'No Data Found for the dimension',
         snackbarErrorBtn: 'Close',
         initSearch: 'No search has been performed yet'
+    },
+    character: {
+        noDataFoundErrorMessage: 'No Data found or the character ID',
+        idMissing: 'The Character ID is a required value',
+        snackbarErrorBtn: 'Close',
+        specie: 'Specie',
+        origin: 'Origin',
+        gender: 'Gender',
+        location: 'Location',
+        episodeTitle: 'Eposodes',
+        episodeName: 'Name',
+        episodeDate: 'Air Date',
+        episodeCode: 'Code',
     }
 }

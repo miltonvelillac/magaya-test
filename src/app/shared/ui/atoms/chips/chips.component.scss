@@ -1,0 +1,16 @@
+.chip {
+    background-color: rgb(50, 50, 50);
+    margin: 0;
+    padding: 7px;
+    border-radius: 5px;
+    width: fit-content;
+    height: fit-content;
+}
+
+:host-context(.alert) .chip {
+    background-color: rgb(104, 24, 24);
+}
+
+:host-context(.success) .chip {
+    background-color: rgb(15, 88, 39);
+}
