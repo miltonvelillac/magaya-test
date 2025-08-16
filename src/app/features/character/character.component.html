@@ -11,23 +11,26 @@
             <section class="card__detail-section">
             <section class="card__info">
                 <app-label [label]="labels.specie"/>
-                <app-chips [label]="getSelectedCharacter()?.species"/>
+                <app-chips [isLoading]="isLoading()" [label]="getSelectedCharacter()?.species"/>
             </section>
             <section class="card__info">
                 <app-label [label]="labels.gender"/>
-                <app-chips [label]="getSelectedCharacter()?.gender"/>
+                <app-chips [isLoading]="isLoading()" [label]="getSelectedCharacter()?.gender"/>
             </section>
             <section class="card__info">
                 <app-label [label]="labels.origin"/>
-                <app-chips [label]="getSelectedCharacter()?.origin?.name"/>
+                <app-chips [isLoading]="isLoading()" [label]="getSelectedCharacter()?.origin?.name"/>
             </section>
             <section class="card__info">
                 <app-label [label]="labels.location"/>
-                <app-chips [label]="getSelectedCharacter()?.location?.name" [isClickeble]="true" (click)="selectLocation()" />
+                <app-chips [isLoading]="isLoading()" [label]="getSelectedCharacter()?.location?.name" [isClickeble]="true" (click)="selectLocation()" />
+            </section>
+            <section class="card__info">
+                <app-label [label]="labels.dimension"/>                
+                <app-chips [label]="selectedLocation ? selectedLocation()?.dimension : ''" [isClickeble]="true" [isLoading]="selectedLocationIsLoading()" (click)="selectLocation()" />
             </section>
         </section>
         </ng-container>
     
     </app-card>
 </section>
-<app-global-spinner [isLoading]="isLoading()"/>

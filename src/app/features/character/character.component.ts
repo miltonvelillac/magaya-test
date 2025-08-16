@@ -1,26 +1,26 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CharactersHandlerStore } from '@core/state/characters/handler/characters-handler.store';
+import { LocationHandlerStore } from '@core/state/location/handler/location-handler.store';
 import { TextConstant } from '@shared/constants/text.constant';
 import { ChipStylesEnum } from '@shared/enums/chip-styles.enum';
 import { CharacterModel } from '@shared/models/character.model';
 import { AvatarComponent } from '@shared/ui/atoms/avatar/avatar.component';
 import { ChipsComponent } from '@shared/ui/atoms/chips/chips.component';
-import { GlobalSpinnerComponent } from '@shared/ui/atoms/global-spinner/global-spinner.component';
 import { LabelComponent } from '@shared/ui/atoms/label/label.component';
 import { SnackBarService } from '@shared/ui/atoms/snack-bar/snack-bar.service';
 import { CardComponent } from '@shared/ui/molecules/card/card.component';
+import { RegexUtils } from '@shared/utils/regex/regex.utils';
 
 @Component({
   selector: 'app-character',
   standalone: true,
-  imports: [    
+  imports: [
     LabelComponent,
     ChipsComponent,
-    GlobalSpinnerComponent,
     CardComponent,
-    AvatarComponent
+    AvatarComponent,
   ],
   templateUrl: './character.component.html',
   styleUrl: './character.component.scss',
@@ -38,6 +38,7 @@ import { CardComponent } from '@shared/ui/molecules/card/card.component';
 })
 export class CharacterComponent {
   #charactersHandlerStore = inject(CharactersHandlerStore);
+  #locationHandlerStore = inject(LocationHandlerStore);
   #route = inject(ActivatedRoute);
   #snackBarService = inject(SnackBarService);
 
@@ -46,6 +47,9 @@ export class CharacterComponent {
   id = signal<number | undefined>(undefined);
   selectedCharacter = this.#charactersHandlerStore.selectedCharacter;
   isLoading = this.#charactersHandlerStore.isLoading;
+
+  selectedLocation = this.#locationHandlerStore.selectedLocation;
+  selectedLocationIsLoading = this.#locationHandlerStore.isLoading;
 
   getSelectedCharacter = computed(() => this.selectedCharacter ? this.selectedCharacter() : {} as CharacterModel);
   statusClass = computed(() => {
@@ -63,6 +67,13 @@ export class CharacterComponent {
   constructor() {
     this.setId();
     this.loadCharacterById();
+
+    effect(() => {
+      const url = this.selectedCharacter ? this.selectedCharacter()?.location?.url : '';
+      const id = RegexUtils.getCharacterIdFromUrl({ url: url || '' });
+      if (!id) return;
+      this.#locationHandlerStore.loadLocationById({ id });
+    });
   }
 
   setId(): void {

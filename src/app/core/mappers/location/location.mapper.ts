@@ -1,7 +1,8 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TextConstant } from '@shared/constants/text.constant';
 import { ErrorModel } from '@shared/models/error.model';
-import { LocationApiRequestModel } from '@shared/models/location-api-request.model';
+import { LocationApiRequestModel, LocationRequestModel } from '@shared/models/location-api-request.model';
 import { LocationModel } from '@shared/models/location.model';
 import { PaginatedResponseModel } from '@shared/models/paginated-response.model';
 
@@ -10,9 +11,20 @@ import { PaginatedResponseModel } from '@shared/models/paginated-response.model'
 })
 export class LocationMapper {
 
-  getRequest(props: { dimension?: string, location?: string }): LocationApiRequestModel {
-    const { dimension, location } = props;
-    return { dimension, location }
+  getRequest(props: LocationRequestModel): LocationApiRequestModel {
+    const { ids, dimension, location, page } = props;
+
+    const params = new HttpParams({
+      fromObject: {
+        dimension: dimension || '',
+        location: location || '',
+        ...(page ? { page } : {})
+      }
+    });
+
+    const idsParams = ids?.join(',') || '';
+    
+    return { ids: idsParams, params };
   }
 
   getResponse(props: { apiResponse: any }): PaginatedResponseModel<LocationModel> {
@@ -29,24 +41,31 @@ export class LocationMapper {
     };
   }
 
-  getErrorResponse(props: { error: any, dimesionSearch: string }): ErrorModel {
-    const { error, dimesionSearch } = props;
-    const errorMessage = error?.error?.error;
-    const message = `${TextConstant.dimension.noDataFoundErrorMessage} ${ dimesionSearch }`;
-    return { messageFromApi: errorMessage, message };
+  getLocations(props: { apiResponse: any }): LocationModel[] {
+    const { apiResponse } = props;
+    return apiResponse?.results?.map((resp: any) => 
+      this.getSingleLocation({apiResponse: resp})
+    ) || [];
   }
 
-  private getLocations(props: { apiResponse: any }): LocationModel[] {
+  getSingleLocation(props: { apiResponse: any }): LocationModel {
     const { apiResponse } = props;
-    return apiResponse?.results?.map((resp: any) => ({
-      id: resp.id,
-      name: resp.name,
-      type: resp.type,
-      dimension: resp.dimension,
-      residents: resp.residents,
-      url: resp.url,
-      created: resp.created
-    })) || [];
+    return {
+      id: apiResponse.id,
+      name: apiResponse.name,
+      type: apiResponse.type,
+      dimension: apiResponse.dimension,
+      residents: apiResponse.residents,
+      url: apiResponse.url,
+      created: apiResponse.created
+    }
+  }
+
+  getErrorResponse(props: { error: any, searchCriteria: string | number }): ErrorModel {
+    const { error, searchCriteria } = props;
+    const errorMessage = error?.error?.error;
+    const message = `${TextConstant.dimension.noDataFoundErrorMessage} ${ searchCriteria }`;
+    return { messageFromApi: errorMessage, message };
   }
 
 }

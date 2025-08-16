@@ -7,6 +7,7 @@ export const TextConstant = {
         origin: 'Origin',
         gender: 'Gender',
         location: 'Location',
+        dimension: 'Dimension',
         altAvatar: 'Photo of the character'
     },
     dimension: {

@@ -9,6 +9,7 @@ export class LocationHandlerStore {
   #store = inject(LocationReducerStore);
 
   locations = this.#store.locations;
+  selectedLocation = this.#store.selectedLocation;
   isLoading = this.#store.isLoading;
   error = this.#store.error;
 
@@ -19,6 +20,11 @@ export class LocationHandlerStore {
   loadLocationsByFilters(props: { dimension?: string, location?: string }): void {
     const { dimension, location } = props;
     this.#store.loadLocations({ dimension, location }).pipe(take(1)).subscribe();
+  }
+
+  loadLocationById(props: { id: number }): void {
+    const { id } = props;
+    this.#store.loadLocationById({ id }).pipe(take(1)).subscribe();
   }
   
 }

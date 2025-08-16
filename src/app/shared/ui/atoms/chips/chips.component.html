@@ -1,1 +1,2 @@
-<p class="chip" [class.isClickeble]="isClickeble()" [innerHTML]="label()"></p>
+@if(isLoading()) { <app-progress-bar /> }
+@else { <p class="chip" [class.isClickeble]="isClickeble()" [innerHTML]="label()"></p> }

@@ -45,18 +45,11 @@ export class RickAndMortyApiService {
     );
   }
 
-  getLocationsByFilters(request: LocationApiRequestModel): Observable<any> {
-    const { dimension, location, page } = request;
-    const params = new HttpParams({
-      fromObject: {
-        dimension: dimension || '',
-        location: location || '',
-        ...(page ? { page } : {})
-      }
-    });
+  getLocationsByFilters(props: LocationApiRequestModel): Observable<any> {
+    const { ids, params } = props;
 
     return this.http.get(
-      `${this.baseUrl}/location`,
+      `${this.baseUrl}/location/${ids}`,
       { params }
     );
   }
