@@ -35,6 +35,8 @@
     &__avatar {
         width: 150px;
         height: 150px;
+        background-image: url('/assets/img/morty-smith.svg');
+        background-size: cover;
     }
 
     &__info {

@@ -1,0 +1,9 @@
+<mat-card class="card" appearance="outlined">
+    <mat-card-header class="card__header">
+        <ng-content select="[cardHeader]"></ng-content>
+    </mat-card-header>
+    <app-divider />
+    <mat-card-content class="card__detail">
+        <ng-content select="[cardContent]"></ng-content>
+    </mat-card-content>
+</mat-card>

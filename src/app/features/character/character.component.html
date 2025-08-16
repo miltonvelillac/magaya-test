@@ -1,14 +1,13 @@
-<mat-card class="card" appearance="outlined">
-  <mat-card-header class="card__header">
-    <img mat-card-avatar class="card__avatar" [src]="getSelectedCharacter()?.image" alt="Photo of the character">
-    <section class="card__title-section">
-        <h1 class="card__title">{{getSelectedCharacter()?.name}}</h1>
-        <app-chips [class]="statusClass()" [label]="getSelectedCharacter()?.status"/>
-    </section>
-  </mat-card-header>
-  <app-divider />
-  <mat-card-content class="card__detail">
-    <section class="card__detail-section">
+<app-card>
+    <ng-container cardHeader>
+        <app-avatar class="card__avatar" [image]="getSelectedCharacter()?.image" [alt]="labels.altAvatar" id="avatarId"/>
+        <section class="card__title-section">
+            <h1 class="card__title">{{getSelectedCharacter()?.name}}</h1>
+            <app-chips [class]="statusClass()" [label]="getSelectedCharacter()?.status"/>
+        </section>
+    </ng-container>
+    <ng-container cardContent>
+        <section class="card__detail-section">
         <section class="card__info">
             <app-label [label]="labels.specie"/>
             <app-chips [label]="getSelectedCharacter()?.species"/>
@@ -26,6 +25,7 @@
             <app-chips [label]="getSelectedCharacter()?.location?.name" [isClickeble]="true" (click)="selectLocation()" />
         </section>
     </section>
-  </mat-card-content>
-</mat-card>
+    </ng-container>
+
+</app-card>
 <app-global-spinner [isLoading]="isLoading()"/>

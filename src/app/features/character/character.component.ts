@@ -1,27 +1,25 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute } from '@angular/router';
 import { CharactersHandlerStore } from '@core/state/characters/handler/characters-handler.store';
 import { TextConstant } from '@shared/constants/text.constant';
 import { ChipStylesEnum } from '@shared/enums/chip-styles.enum';
 import { CharacterModel } from '@shared/models/character.model';
+import { AvatarComponent } from '@shared/ui/atoms/avatar/avatar.component';
 import { ChipsComponent } from '@shared/ui/atoms/chips/chips.component';
-import { DividerComponent } from '@shared/ui/atoms/divider/divider.component';
 import { GlobalSpinnerComponent } from '@shared/ui/atoms/global-spinner/global-spinner.component';
 import { LabelComponent } from '@shared/ui/atoms/label/label.component';
 import { SnackBarService } from '@shared/ui/atoms/snack-bar/snack-bar.service';
+import { CardComponent } from '@shared/ui/molecules/card/card.component';
 
 @Component({
   selector: 'app-character',
   standalone: true,
-  imports: [
-    MatCardModule,
-    MatButtonModule,
+  imports: [    
     LabelComponent,
     ChipsComponent,
-    DividerComponent,
-    GlobalSpinnerComponent
+    GlobalSpinnerComponent,
+    CardComponent,
+    AvatarComponent
   ],
   templateUrl: './character.component.html',
   styleUrl: './character.component.scss',
