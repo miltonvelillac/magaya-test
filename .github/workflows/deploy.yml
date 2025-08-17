@@ -28,7 +28,7 @@ jobs:
 
       - run: npm ci
 
-      # Chrome para Karma en modo headless
+      # Chrome for Karma headless mode
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
 
