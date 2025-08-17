@@ -41,7 +41,7 @@ export const TextConstant = {
         initSearch: 'No search has been performed yet'
     },
     header: {
-        title: 'R&M Lookup',
+        title: 'Rick And Morty',
         dimensionMenu: 'Dimensions',
         locationMenu: 'Locations',
         episodeMenu: 'Episodes'

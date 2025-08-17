@@ -7,6 +7,7 @@
 @use '@angular/material' as mat;
 @use 'assets/styles/theme' as *;
 @use 'assets/styles/colors' as *;
+@use 'assets/styles/fonts' as *;
 
 html {
   @include mat.theme((
@@ -38,7 +39,7 @@ body {
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: $font-family }
 h1, h2, h3, h4, h5, h6 {
   color: var(--title);
   font-weight: 400;
@@ -50,4 +51,8 @@ h1 {
 }
 h2 {
   margin: 0;
+}
+
+input {
+  font-family: $font-family; 
 }

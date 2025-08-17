@@ -25,7 +25,6 @@
       "dom"
     ],
     "paths": {
-      // "@core/*": ["src/app/core/*"],
       "@core/*": ["src/app/core/*"],
       "@shared/*": ["src/app/shared/*"],
       "@features/*": ["src/app/features/*"]
