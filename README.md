@@ -54,4 +54,5 @@ rick-and-morty.api.service.spec.ts
 character.component.spec.ts
 
 * NOTE: The Application runs for different screen resolutions, it also works fine for mobile or tablets
+* NOTE: The Application was deployed using github pages, you can see it in https://miltonvelillac.github.io/rick-and-morty
 
