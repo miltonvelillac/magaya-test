@@ -1,13 +1,14 @@
 :root {
-    --background: rgb(32, 31, 32);
-    --background-card: rgb(32, 32, 32);
-    --text: rgb(233, 224, 228);
-    --title: white;
+  --alert: rgb(167, 2, 2);
+  --background: rgb(32, 31, 32);
+  --background-card: rgb(32, 32, 32);
+  --text: rgb(233, 224, 228);
+  --title: white;
 
-    --rm-bg:      #0b1020;
+  --rm-bg: #0b1020;
   --rm-surface: #1b2a4a;
-  --rm-primary: #39ff14; /* portal */
-  --rm-cyan:    #7df9ff; /* acento */
-  --rm-text:    #e6f5ff;
-  --rm-muted:   #8aa1b1;
+  --rm-primary: #39ff14;
+  --rm-cyan: #7df9ff;
+  --rm-text: #e6f5ff;
+  --rm-muted: #8aa1b1;
 }

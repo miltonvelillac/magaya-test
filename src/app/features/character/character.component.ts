@@ -46,6 +46,7 @@ export class CharacterComponent {
 
   id = signal<number | undefined>(undefined);
   selectedCharacter = this.#charactersHandlerStore.selectedCharacter;
+  selectedError = this.#charactersHandlerStore.error;
   isLoading = this.#charactersHandlerStore.isLoading;
 
   selectedLocation = this.#locationHandlerStore.selectedLocation;
@@ -68,6 +69,7 @@ export class CharacterComponent {
     this.setId();
     this.loadCharacterById();
     this.loadLocation();
+    this.listenError();
   }
 
   private setId(): void {
@@ -80,7 +82,7 @@ export class CharacterComponent {
   }
 
   private loadCharacterById(): void {
-    if (!this.id || !this.id()) return;
+    if (!this.id || this.id() == null) return;
     this.#charactersHandlerStore.loadCharacterById({ id: this.id() || 0 });
   }
 
@@ -90,6 +92,15 @@ export class CharacterComponent {
       const id = RegexUtils.getCharacterIdFromUrl({ url: url || '' });
       if (!id) return;
       this.#locationHandlerStore.loadLocationById({ id });
+    });
+  }
+
+  private listenError(): void {
+    effect(() => {
+      const error = this.selectedError ? this.selectedError() : undefined;
+      if(!error) return;
+      console.error(error);
+      this.#snackBarService.openErrorSnackBar({ message: this.labels?.noDataFoundErrorMessage || '', actionButtonText: this.labels.snackbarErrorBtn });
     });
   }
 
