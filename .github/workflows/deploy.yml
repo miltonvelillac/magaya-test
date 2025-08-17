@@ -40,7 +40,7 @@ jobs:
       - name: Build Angular (prod)
         run: |
           REPO_NAME="${GITHUB_REPOSITORY#*/}"
-          npx ng build --configuration=production --base-href "/${REPO_NAME}/"
+          npx ng build --configuration=production --base-href "/${REPO_NAME}/" --deploy-url "/${REPO_NAME}/"
 
       - name: Detect output folder
         id: detect
