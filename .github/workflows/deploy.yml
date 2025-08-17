@@ -1,4 +1,4 @@
-name: Deploy Angular to GitHub Pages
+name: Test, Build & Deploy Angular to GitHub Pages
 
 on:
   push:
@@ -17,47 +17,48 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
 
-      - name: Install deps
-        run: npm ci
+      - run: npm ci
 
-      # Construye con base-href dinámico para /<repo>/
+      # Chrome para Karma en modo headless
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Run unit tests (headless)
+        env:
+          CHROME_BIN: chrome
+        run: npm run test:ci
+
       - name: Build Angular (prod)
         run: |
           REPO_NAME="${GITHUB_REPOSITORY#*/}"
           npx ng build --configuration=production --base-href "/${REPO_NAME}/"
 
-      # Detecta la carpeta correcta (soporta proyectos con/ sin SSR)
       - name: Detect output folder
         id: detect
-        shell: bash
         run: |
           node - <<'NODE'
           const fs = require('fs');
-          const aj = require('./angular.json');
-          const projectName = Object.keys(aj.projects)[0];
-          const targets = aj.projects[projectName].targets || aj.projects[projectName].architect;
+          const aj = JSON.parse(fs.readFileSync('angular.json','utf8'));
+          const proj = Object.keys(aj.projects)[0];
+          const targets = aj.projects[proj].targets || aj.projects[proj].architect;
           const out = targets.build.options.outputPath;
           const final = fs.existsSync(out + '/browser') ? (out + '/browser') : out;
-          console.log(`path=${final}`);
           require('fs').appendFileSync(process.env.GITHUB_OUTPUT, `path=${final}\n`);
           NODE
 
-      # Fix SPA en GitHub Pages: copia index.html a 404.html
       - name: Add SPA 404.html
         run: cp "${{ steps.detect.outputs.path }}/index.html" "${{ steps.detect.outputs.path }}/404.html"
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: ${{ steps.detect.outputs.path }}
 
@@ -67,11 +68,6 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    permissions:
-      pages: write
-      id-token: write
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v4
-        
