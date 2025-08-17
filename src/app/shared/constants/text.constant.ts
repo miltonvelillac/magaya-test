@@ -8,7 +8,9 @@ export const TextConstant = {
         gender: 'Gender',
         location: 'Location',
         dimension: 'Dimension',
-        altAvatar: 'Photo of the character'
+        altAvatar: 'Photo of the character',
+        backBtn: 'Back',
+        nextBtn: 'Next'
     },
     dimension: {
         labelInputField: 'Dimension',

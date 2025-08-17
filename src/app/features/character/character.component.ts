@@ -1,15 +1,18 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { NavigationServiceTsService } from '@core/services/navigation/navigation.service.ts.service';
 import { CharactersHandlerStore } from '@core/state/characters/handler/characters-handler.store';
 import { LocationHandlerStore } from '@core/state/location/handler/location-handler.store';
 import { TextConstant } from '@shared/constants/text.constant';
 import { ChipStylesEnum } from '@shared/enums/chip-styles.enum';
 import { CharacterModel } from '@shared/models/character.model';
 import { AvatarComponent } from '@shared/ui/atoms/avatar/avatar.component';
+import { ButtonComponent } from '@shared/ui/atoms/button/button.component';
 import { ChipsComponent } from '@shared/ui/atoms/chips/chips.component';
 import { LabelComponent } from '@shared/ui/atoms/label/label.component';
 import { SnackBarService } from '@shared/ui/atoms/snack-bar/snack-bar.service';
+import { TitleComponent } from '@shared/ui/atoms/title/title.component';
 import { CardComponent } from '@shared/ui/molecules/card/card.component';
 import { RegexUtils } from '@shared/utils/regex/regex.utils';
 
@@ -21,6 +24,8 @@ import { RegexUtils } from '@shared/utils/regex/regex.utils';
     ChipsComponent,
     CardComponent,
     AvatarComponent,
+    ButtonComponent,
+    TitleComponent
   ],
   templateUrl: './character.component.html',
   styleUrl: './character.component.scss',
@@ -41,6 +46,7 @@ export class CharacterComponent {
   #locationHandlerStore = inject(LocationHandlerStore);
   #route = inject(ActivatedRoute);
   #snackBarService = inject(SnackBarService);
+  #navigationServiceTsService = inject(NavigationServiceTsService);
 
   labels = TextConstant.character;
 
@@ -63,13 +69,39 @@ export class CharacterComponent {
       default:
         return '';
     }
-  })
+  });
+
+  getId = computed<number>(() => !this.id || !this.id() ? 0 : this.id() as number);
+
+  getDisableBackBtn = computed<boolean>(() => {
+    const id = this.getId();
+    return id <= 1;
+  });
 
   constructor() {
     this.setId();
     this.loadCharacterById();
     this.loadLocation();
     this.listenError();
+  }
+
+  goBack(): void {
+    if(this.getDisableBackBtn()) return;
+    const id = this.getId() - 1;
+    this.navigateTo({ id });
+  }
+
+  goNext(): void {
+    const id = this.getId() + 1;
+    this.navigateTo({ id });
+  }
+
+  private navigateTo(props: { id: number }): void {
+    const { id } = props;
+    this.#navigationServiceTsService.goToCharacters({ id });
+    this.id.update(() => id);
+    this.#charactersHandlerStore.clearState();
+    this.loadCharacterById();
   }
 
   private setId(): void {
@@ -98,7 +130,7 @@ export class CharacterComponent {
   private listenError(): void {
     effect(() => {
       const error = this.selectedError ? this.selectedError() : undefined;
-      if(!error) return;
+      if (!error) return;
       console.error(error);
       this.#snackBarService.openErrorSnackBar({ message: this.labels?.noDataFoundErrorMessage || '', actionButtonText: this.labels.snackbarErrorBtn });
     });

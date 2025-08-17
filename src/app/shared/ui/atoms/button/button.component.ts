@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButtonAppearance, MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-button',
@@ -16,4 +16,5 @@ export class ButtonComponent {
   label = input('');
   disabled = input(false);
   color = input('primary');
+  apparience = input<MatButtonAppearance>('filled');
 }

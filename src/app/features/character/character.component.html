@@ -3,7 +3,7 @@
         <ng-container cardHeader>
             <app-avatar class="card__avatar" [image]="getSelectedCharacter()?.image" [alt]="labels.altAvatar" id="avatarId"/>
             <section class="card__title-section">
-                <h1 class="card__title">{{getSelectedCharacter()?.name}}</h1>
+                <app-title id="characterTitleId" [label]="getSelectedCharacter()?.name || ''" [isLoading]="isLoading()" />
                 <app-chips [class]="statusClass()" [isLoading]="isLoading()" [label]="getSelectedCharacter()?.status"/>
             </section>
         </ng-container>
@@ -31,6 +31,11 @@
             </section>
         </section>
         </ng-container>
-    
+        <ng-container cardFooter>
+            <section class="card__actions">
+                <app-button [label]="labels.backBtn" id="backBtnId" apparience="elevated"  [disabled]="getDisableBackBtn()" (click)="goBack()" />
+                <app-button [label]="labels.nextBtn" id="nextBtnId" apparience="elevated" (click)="goNext()"/>
+            </section>
+        </ng-container>
     </app-card>
 </section>
