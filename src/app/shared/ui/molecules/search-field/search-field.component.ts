@@ -15,8 +15,8 @@ import { InputTextComponent } from '@shared/ui/atoms/input-text/input-text.compo
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SearchFieldComponent {
-  formField = input(new FormControl());
   idInput = input.required<string>();
+  formField = input(new FormControl());
   nameInput = input('');
   labelInput = input('');
   placeholderInput = input('');

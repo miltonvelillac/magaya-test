@@ -61,7 +61,7 @@ describe('CharacterComponent', () => {
     snackBarService = TestBed.inject(SnackBarService);
   });
 
-  fdescribe('setId', () => {
+  describe('setId', () => {
     it(`should update the id`, () => {
       // Arrange
       setSpys();

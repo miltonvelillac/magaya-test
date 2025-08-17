@@ -22,15 +22,15 @@ import { SearchTableComponent } from '@shared/ui/organisms/search-table/search-t
 })
 export class LocationsComponent implements OnDestroy {
   #locationHandlerStore = inject(LocationHandlerStore);
-  #characterHelperService = inject(LocationHelperService);
+  #locationHelperService = inject(LocationHelperService);
 
-  locations = this.#characterHelperService.locations;
-  locationLoading = this.#characterHelperService.locationLoading;
-  locationErrror = this.#characterHelperService.locationErrror;
+  locations = this.#locationHelperService.locations;
+  locationLoading = this.#locationHelperService.locationLoading;
+  locationErrror = this.#locationHelperService.locationErrror;
 
-  characters = this.#characterHelperService.characters;
-  charactersLoading = this.#characterHelperService.charactersLoading;
-  charactersErrror = this.#characterHelperService.charactersErrror;
+  characters = this.#locationHelperService.characters;
+  charactersLoading = this.#locationHelperService.charactersLoading;
+  charactersErrror = this.#locationHelperService.charactersErrror;
 
   labels = TextConstant.location;
   formNames = LocationsFormNamesEnum;
@@ -38,14 +38,14 @@ export class LocationsComponent implements OnDestroy {
     [this.formNames.location]: new FormControl('', [Validators.required])
   });
 
-  emptyDataMessage = this.#characterHelperService.emptyDataMessage;
-  pageIndex = this.#characterHelperService.pageIndex;
-  pageSize = this.#characterHelperService.pageSize;
-  pageLength = this.#characterHelperService.pageLength;
-  displayedColumns = this.#characterHelperService.displayedColumns;
+  emptyDataMessage = this.#locationHelperService.emptyDataMessage;
+  pageIndex = this.#locationHelperService.pageIndex;
+  pageSize = this.#locationHelperService.pageSize;
+  pageLength = this.#locationHelperService.pageLength;
+  displayedColumns = this.#locationHelperService.displayedColumns;
 
-  charactersData = this.#characterHelperService.charactersData;
-  isLoading = this.#characterHelperService.isLoading;
+  charactersData = this.#locationHelperService.charactersData;
+  isLoading = this.#locationHelperService.isLoading;
 
   constructor() {
     this.loadCharactersByIds();
@@ -54,11 +54,11 @@ export class LocationsComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.#characterHelperService.onDestroy();
+    this.#locationHelperService.onDestroy();
   }
 
   disableSearchBtn(): boolean {
-    return this.#characterHelperService.disableSearchBtn();
+    return this.#locationHelperService.disableSearchBtn();
   }
 
   search(): void {
@@ -66,32 +66,32 @@ export class LocationsComponent implements OnDestroy {
       this.form.markAllAsTouched();
       return
     };
-    this.#characterHelperService.searchLocation();
+    this.#locationHelperService.searchLocation();
     const { location } = this.form.value;
 
     this.#locationHandlerStore.loadLocationsByFilters({ location: location || '' });
   }
 
   onPage(pageEvent: PageEvent): void {
-    this.#characterHelperService.onPage(pageEvent);
+    this.#locationHelperService.onPage(pageEvent);
   }
 
   onRowClick(row: CharacterModel): void {
-    this.#characterHelperService.onRowClick(row);
+    this.#locationHelperService.onRowClick(row);
   }
 
   private loadCharactersByIds(): void {
-    effect(() => this.#characterHelperService.loadCharactersByIds({ locations: this.locations() }));
+    effect(() => this.#locationHelperService.loadCharactersByIds({ locations: this.locations() }));
   }
 
   private loadLocationsError(): void {
-    effect(() => this.#characterHelperService.loadLocationsError(
+    effect(() => this.#locationHelperService.loadLocationsError(
       { noDataFound: this.labels.noDataFound, snackbarErrorBtn: this.labels.snackbarErrorBtn }
     ));
   };
 
   private setDisableForm(): void {
-    effect(() => this.#characterHelperService.setDisableForm({ form: this.form }));
+    effect(() => this.#locationHelperService.setDisableForm({ form: this.form }));
   }
 
 }

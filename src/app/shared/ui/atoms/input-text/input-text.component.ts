@@ -30,6 +30,7 @@ export class InputTextComponent implements AfterViewInit {
   errorMessage = input('');
 
   icon = input('');
+  idIcon = input('');
   showIcon = input(true);
 
   onIconClick = output<void>();

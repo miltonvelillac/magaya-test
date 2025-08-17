@@ -77,7 +77,7 @@ describe('CharactersReducerStore', () => {
   });
 
   describe('loadCharactersByIds', () => {
-    fit('should short-circuit when no ids to search, not calling API', (done) => {
+    it('should short-circuit when no ids to search, not calling API', (done) => {
       // Arrange
       mapper.getIdsToSearch.and.returnValue([]); // nothing to fetch
 

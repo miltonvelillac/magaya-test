@@ -15,6 +15,7 @@
                 class="field__clear"
                 [class.hidden]="!showIcon()"
                 [class.visible]="showIcon()"
+                [id]="idIcon()"
                 (click)="onIconClick.emit()"
             >{{icon()}}</mat-icon>
         }

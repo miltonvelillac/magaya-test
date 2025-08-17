@@ -1,18 +1,36 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ButtonComponent } from './button.component';
+import { MatButtonModule } from '@angular/material/button';
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-test-button',
+  standalone: true,
+  imports: [
+    ButtonComponent
+  ],
+  template: `
+  <app-button id="btnId" />
+  `
+})
+export class ButtonTestComponent {}
 
 describe('ButtonComponent', () => {
-  let component: ButtonComponent;
-  let fixture: ComponentFixture<ButtonComponent>;
+  let component: ButtonTestComponent;
+  let fixture: ComponentFixture<ButtonTestComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ButtonComponent]
+      imports: [
+        ButtonTestComponent,
+        ButtonComponent,
+        MatButtonModule
+      ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ButtonComponent);
+    fixture = TestBed.createComponent(ButtonTestComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

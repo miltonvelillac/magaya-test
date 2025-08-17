@@ -1,18 +1,35 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TableComponent } from './table.component';
+import { Component } from '@angular/core';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
+@Component({
+  selector: 'app-test-table',
+  imports: [TableComponent],
+  template: `
+  <app-table [displayedColumns]="[]" [rows]="[]" [length]="10"/>
+  `,
+})
+export class TableTestComponent { }
 
 describe('TableComponent', () => {
-  let component: TableComponent<any>;
-  let fixture: ComponentFixture<TableComponent<any>>;
+  let component: TableTestComponent;
+  let fixture: ComponentFixture<TableTestComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TableComponent]
+      imports: [
+        TableTestComponent,
+        TableComponent,
+        MatTableModule,
+        MatPaginatorModule
+      ]
     })
-    .compileComponents();
+      .compileComponents();
 
-    fixture = TestBed.createComponent(TableComponent);
+    fixture = TestBed.createComponent(TableTestComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
