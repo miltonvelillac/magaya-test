@@ -15,7 +15,7 @@ export class EpisodeMapper {
     const { episodeName } = props;
     const params = new HttpParams({
       fromObject: {
-        name: episodeName
+        ...(episodeName ? { name: episodeName } : {})
       }
     });
     

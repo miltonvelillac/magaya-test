@@ -11,6 +11,7 @@ import { LocationModel } from '@shared/models/location.model';
 import { SnackBarService } from '@shared/ui/atoms/snack-bar/snack-bar.service';
 import { MockProvider } from 'ng-mocks';
 import { CharacterComponent } from './character.component';
+import { NavigationServiceTsService } from '@core/services/navigation/navigation.service.ts.service';
 
 describe('CharacterComponent', () => {
   let component: CharacterComponent;
@@ -19,6 +20,7 @@ describe('CharacterComponent', () => {
   let activatedRoute: ActivatedRoute;
   let charactersHandlerStore: CharactersHandlerStore;
   let locationHandlerStore: LocationHandlerStore;
+  let navigationServiceTsService: NavigationServiceTsService;
   let snackBarService: SnackBarService;
 
   const createInstance = () => {
@@ -49,6 +51,7 @@ describe('CharacterComponent', () => {
         MockProvider(CharactersHandlerStore),
         MockProvider(LocationHandlerStore),
         MockProvider(SnackBarService),
+        MockProvider(NavigationServiceTsService),
         MockProvider(ActivatedRoute, { snapshot: { queryParamMap: { get(id: string) { return queryParamId(); } } } as any }),
       ],
     });
@@ -58,7 +61,103 @@ describe('CharacterComponent', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     charactersHandlerStore = TestBed.inject(CharactersHandlerStore);
     locationHandlerStore = TestBed.inject(LocationHandlerStore);
+    navigationServiceTsService = TestBed.inject(NavigationServiceTsService);
     snackBarService = TestBed.inject(SnackBarService);
+  });
+
+  describe('getDisableBackBtn', () => {
+    it(`should disable the back button when the id is 1`, () => {
+      // Arrange
+      setSpys();
+      createInstance();
+      initTest();
+
+      // Act
+      component.id.update(() => 1);
+      const disableBtn = component.getDisableBackBtn();
+
+      // Assert
+      expect(disableBtn).toBeTrue();
+    });
+
+    it(`should disable the back button when the id lower than 1`, () => {
+      // Arrange
+      setSpys();
+      createInstance();
+      initTest();
+
+      // Act
+      component.id.update(() => 0);
+      const disableBtn = component.getDisableBackBtn();
+
+      // Assert
+      expect(disableBtn).toBeTrue();
+    });
+
+    it(`should not disable the back button when the id grater than 1`, () => {
+      // Arrange
+      setSpys();
+      createInstance();
+      initTest();
+
+      // Act
+      component.id.update(() => 2);
+      const disableBtn = component.getDisableBackBtn();
+
+      // Assert
+      expect(disableBtn).toBeFalse();
+    });
+  });
+
+  describe('goBack', () => {
+    it(`should call the method to navigate when the back button is enable`, () => {
+      // Arrange
+      setSpys();
+      createInstance();
+      initTest();
+      spyOn(component, 'getDisableBackBtn').and.returnValue(false);
+      spyOn<any>(component, 'navigateTo');
+      component.id.update(() => 2);
+      
+      // Act
+      component.goBack();
+
+      // Assert
+      expect(component['navigateTo']).toHaveBeenCalledWith({ id: 1 });
+    });
+  
+    it(`should not call the method to navigate when the button is disabled`, () => {
+      // Arrange
+      setSpys();
+      createInstance();
+      initTest();
+      spyOn(component, 'getDisableBackBtn').and.returnValue(true);
+      spyOn<any>(component, 'navigateTo');
+      component.id.update(() => 2);
+      
+      // Act
+      component.goBack();
+
+      // Assert
+      expect(component['navigateTo']).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('goNext', () => {
+    it(`should call the method to navigate with the next character id`, () => {
+      // Arrange
+      setSpys();
+      createInstance();
+      initTest();
+      spyOn<any>(component, 'navigateTo');
+      component.id.update(() => 2);
+      
+      // Act
+      component.goNext();
+
+      // Assert
+      expect(component['navigateTo']).toHaveBeenCalledWith({ id: 3 });
+    });
   });
 
   describe('setId', () => {
@@ -113,21 +212,6 @@ describe('CharacterComponent', () => {
 
       // Assert
       expect(charactersHandlerStore.loadCharacterById).toHaveBeenCalledWith({ id: 12 });
-    });
-
-    xit(`should not call the loadCharacterById method`, () => {
-      // Arrange
-      setSpys();
-      spyOn(charactersHandlerStore, 'loadCharacterById');
-      createInstance();
-      initTest();
-      component.id.update(() => undefined);
-
-      // Act
-      component['loadCharacterById']();
-
-      // Assert
-      expect(charactersHandlerStore.loadCharacterById).not.toHaveBeenCalled();
     });
   });
 });

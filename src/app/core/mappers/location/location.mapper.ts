@@ -16,8 +16,8 @@ export class LocationMapper {
 
     const params = new HttpParams({
       fromObject: {
-        dimension: dimension || '',
-        location: location || '',
+        ...(dimension ? { dimension } : {}),
+        ...(location ? { location } : {}),
         ...(page ? { page } : {})
       }
     });

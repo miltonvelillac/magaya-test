@@ -3,7 +3,7 @@ module.exports = (config) => {
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
-    browsers: ['ChromeHeadlessNoSandbox'],
+    browsers: ['ChromeHeadlessNoSandbox, ChromeHeadless'],
     customLaunchers: {
       ChromeHeadlessNoSandbox: {
         base: 'ChromeHeadless',
@@ -13,6 +13,9 @@ module.exports = (config) => {
     reporters: ['progress', 'kjhtml'],
     client: { clearContext: false },
     singleRun: true,
-    autoWatch: false
+    autoWatch: false,
+    browserNoActivityTimeout: 60000,
+    captureTimeout: 120000,
+    browserDisconnectTolerance: 2,
   });
 };

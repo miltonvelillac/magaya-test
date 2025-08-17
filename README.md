@@ -55,4 +55,5 @@ character.component.spec.ts
 
 * NOTE: The Application runs for different screen resolutions, it also works fine for mobile or tablets
 * NOTE: The Application was deployed using github pages, you can see it in https://miltonvelillac.github.io/rick-and-morty
+* NOTE: There are 3 search screens (Locations, Dimensions, and Episodes), it could have been just one with 3 search entries, but I did it this way to show you how I handle reuse of components and logic, also the challenge requirement specified that there should be 3 pages.
 

@@ -35,9 +35,10 @@ export class RickAndMortyApiService {
 
   getLocationsByFilters(props: LocationApiRequestModel): Observable<any> {
     const { ids, params } = props;
+    const idsToSearch = ids ? `/${ids}` : '';
 
     return this.http.get(
-      `${this.baseUrl}/location/${ids}`,
+      `${this.baseUrl}/location${idsToSearch}`,
       { params }
     );
   }
