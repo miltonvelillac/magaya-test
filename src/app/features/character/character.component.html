@@ -4,7 +4,7 @@
             <app-avatar class="card__avatar" [image]="getSelectedCharacter()?.image" [alt]="labels.altAvatar" id="avatarId"/>
             <section class="card__title-section">
                 <h1 class="card__title">{{getSelectedCharacter()?.name}}</h1>
-                <app-chips [class]="statusClass()" [label]="getSelectedCharacter()?.status"/>
+                <app-chips [class]="statusClass()" [isLoading]="isLoading()" [label]="getSelectedCharacter()?.status"/>
             </section>
         </ng-container>
         <ng-container cardContent>
@@ -23,11 +23,11 @@
             </section>
             <section class="card__info">
                 <app-label [label]="labels.location"/>
-                <app-chips [isLoading]="isLoading()" [label]="getSelectedCharacter()?.location?.name" [isClickeble]="true" (click)="selectLocation()" />
+                <app-chips [isLoading]="isLoading()" [label]="getSelectedCharacter()?.location?.name" [isClickeble]="true" />
             </section>
             <section class="card__info">
                 <app-label [label]="labels.dimension"/>                
-                <app-chips [label]="selectedLocation ? selectedLocation()?.dimension : ''" [isClickeble]="true" [isLoading]="selectedLocationIsLoading()" (click)="selectLocation()" />
+                <app-chips [label]="selectedLocation ? selectedLocation()?.dimension : ''" [isClickeble]="true" [isLoading]="selectedLocationIsLoading()" />
             </section>
         </section>
         </ng-container>

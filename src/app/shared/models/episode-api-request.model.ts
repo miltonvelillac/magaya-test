@@ -1,3 +1,9 @@
+import { HttpParams } from "@angular/common/http";
+
 export interface EpisodApiRequestModel {
-    name: string;
+    params?: HttpParams;
+}
+
+export interface EpisodRequestModel {
+    episodeName: string;
 }

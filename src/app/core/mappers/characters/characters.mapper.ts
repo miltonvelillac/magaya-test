@@ -1,6 +1,7 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TextConstant } from '@shared/constants/text.constant';
-import { CharacterApiRequestModel } from '@shared/models/character-api-request.model';
+import { CharacterApiRequestModel, CharacterRequestModel } from '@shared/models/character-api-request.model';
 import { CharacterModel } from '@shared/models/character.model';
 import { ErrorModel } from '@shared/models/error.model';
 
@@ -9,9 +10,17 @@ import { ErrorModel } from '@shared/models/error.model';
 })
 export class CharactersMapper {
 
-  getRequest(props: { ids: number[] }): CharacterApiRequestModel {
-    const { ids } = props;
-    return { ids };
+  getRequest(props: CharacterRequestModel): CharacterApiRequestModel {
+    const { ids, page } = props;
+    const idsParams = ids?.join(',') || '';
+
+    const params = new HttpParams({
+      fromObject: {
+        ...(page ? { page } : {})
+      }
+    });
+
+    return { ids: idsParams, params };
   }
 
   getResponseByCharacterIds(response: any[]): CharacterModel[] {

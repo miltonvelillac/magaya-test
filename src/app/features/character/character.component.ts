@@ -67,16 +67,10 @@ export class CharacterComponent {
   constructor() {
     this.setId();
     this.loadCharacterById();
-
-    effect(() => {
-      const url = this.selectedCharacter ? this.selectedCharacter()?.location?.url : '';
-      const id = RegexUtils.getCharacterIdFromUrl({ url: url || '' });
-      if (!id) return;
-      this.#locationHandlerStore.loadLocationById({ id });
-    });
+    this.loadLocation();
   }
 
-  setId(): void {
+  private setId(): void {
     const id = this.#route.snapshot.queryParamMap.get('id');
     if (!id) {
       this.#snackBarService.openErrorSnackBar({ message: this.labels?.idMissing || '', actionButtonText: this.labels.snackbarErrorBtn });
@@ -85,14 +79,18 @@ export class CharacterComponent {
     this.id.update(() => Number(id));
   }
 
-  loadCharacterById(): void {
-    if (!this.id) return;
+  private loadCharacterById(): void {
+    if (!this.id || !this.id()) return;
     this.#charactersHandlerStore.loadCharacterById({ id: this.id() || 0 });
   }
 
-  selectLocation(): void {
-    // TODO: goest to location
-    // const location = this.selectedCharacter()?.location.name;
+  private loadLocation(): void {
+    effect(() => {
+      const url = this.selectedCharacter ? this.selectedCharacter()?.location?.url : '';
+      const id = RegexUtils.getCharacterIdFromUrl({ url: url || '' });
+      if (!id) return;
+      this.#locationHandlerStore.loadLocationById({ id });
+    });
   }
 
 }

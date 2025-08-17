@@ -52,7 +52,7 @@ export const CharactersReducerStore = signalStore(
       // NOTE: Since the data shouldn't change frequently, the UI only calls the API when it doesn't have the data.
       if (idsToSearch.length === 0) {
         patchState(store, { isLoading: false, error: undefined })
-        return of();
+        return of({});
       }
 
       const request = charactersMapper.getRequest({ ids: idsToSearch });
@@ -83,7 +83,7 @@ export const CharactersReducerStore = signalStore(
       const selectedCharacter = currentCharacters.find(char => char?.id === id);
       if (selectedCharacter) {
         patchState(store, { selectedCharacter });
-        return of();
+        return of({});
       }
       else {
         patchState(store, { isLoading: true });

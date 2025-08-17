@@ -8,6 +8,7 @@ import {
   withMethods,
   withState
 } from '@ngrx/signals';
+import { EpisodRequestModel } from "@shared/models/episode-api-request.model";
 import { EpisodeModel } from "@shared/models/episode.model";
 import { ErrorModel } from "@shared/models/error.model";
 import { catchError, Observable, tap, throwError } from "rxjs";
@@ -39,7 +40,7 @@ export const EpisodeReducerStore = signalStore(
     clearState(): void {
       patchState(store, initialState);
     },
-    loadEpisodes(props: { episodeName: string }): Observable<any> {
+    loadEpisodes(props: EpisodRequestModel): Observable<any> {
       patchState(store, { isLoading: true });
       const { episodeName } = props;
       const request = episodeMapper.getRequest({ episodeName });

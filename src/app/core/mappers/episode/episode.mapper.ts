@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TextConstant } from '@shared/constants/text.constant';
 import { EpisodApiRequestModel } from '@shared/models/episode-api-request.model';
@@ -12,7 +13,13 @@ export class EpisodeMapper {
 
   getRequest(props: { episodeName: string }): EpisodApiRequestModel {
     const { episodeName } = props;
-    return { name: episodeName }
+    const params = new HttpParams({
+      fromObject: {
+        name: episodeName
+      }
+    });
+    
+    return { params }
   }
 
   getResponse(props: { apiResponse: any }): PaginatedResponseModel<EpisodeModel> {

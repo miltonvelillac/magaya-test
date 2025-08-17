@@ -16,28 +16,16 @@ export class RickAndMortyApiService {
   // Note: the methods return any because we are controlling the model response in the mapper service
 
   getCharacters(request: CharacterApiRequestModel): Observable<any> {
-    const { ids, page } = request;
-    const params = new HttpParams({
-      fromObject: {
-        ...(page ? { page } : {})
-      }
-    });
-
-    const idsParams = ids?.join(',') || '';
+    const { ids, params } = request;
 
     return this.http.get(
-      `${this.baseUrl}/character/${idsParams}`,
+      `${this.baseUrl}/character/${ids}`,
       { params }
     );
   }
 
   getEpisodes(request: EpisodApiRequestModel): Observable<any> {
-    const { name } = request;
-    const params = new HttpParams({
-      fromObject: {
-        name
-      }
-    });
+    const { params } = request;    
 
     return this.http.get(
       `${this.baseUrl}/episode`,
