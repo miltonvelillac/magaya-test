@@ -8,14 +8,14 @@ locations, dimensions, episodes, character
 locations -> search page -> the user can add a location name in the input and hits the button or press the enter key, then the UI will call 2 APIs
 1. https://rickandmortyapi.com/api/location/?location=C-137 C-137 is a location name example
 2. The UI gets all the characters Ids
-3. Then it calls the API https://rickandmortyapi.com/api/character/ids, the number of the ids depend of selected items per page, it means, the Items per page are 10 the UI will call the API with 10 ids
-4. When the user navigates throght the pagination the UI will call the API to get and store the characters
-5. NOTE: If the UI checks that a character id already exists in the store it won't be include in the API call because it's not neccesary to request to the backend agan for the existing data due to this is data that not change frequently
-6. If the user hits on of the character rows the UI will redirect to the characters page (in this case the UI won't call the API to get the character data again because it already exist, but if the user reload the page the UI will call the API to get the character data)
+3. Then it calls the API https://rickandmortyapi.com/api/character/ids, the number of the ids depend of selected items per page, it means, if the Items per page are 10 the UI will call the API with 10 ids
+4. When the user navigates through the pagination theN I will call the API to get and store the characters
+5. NOTE: If the UI checks that a character ID already exists in the store, it will not be included in the API call because there is no need to request existing data from the backend again since this data does not change frequently
+6. If the user hits on of the character rows the UI will redirect the user to the character page (in this case the UI won't call the API to get the character data again because it already exists, but if the user reload the page, the UI will call the API to get the character data)
 
-dimensions -> search page -> the flow is the same as location the only change is that the user search by a dimension name
+dimensions -> search page -> The flow is the same as location, the only change is that the user searches by a dimension name.
 
-episodes -> search page -> the flow is pretty much the same as location the only changes are that the user search by an episode name and the UI won't call the location api insead will call the episode API https://rickandmortyapi.com/api/episode?name=Pilo, the rest of the flow is the same.
+episodes -> search page ->The flow is pretty much the same as location, the only changes are that the user searches by episode name and the UI won't call the location API, instead it will call the episode API https://rickandmortyapi.com/api/episode?name=Pilo, the rest of the flow is the same.
 
 
 character -> detail page -> 
@@ -31,21 +31,20 @@ character -> detail page ->
 # Design Patterns
 * The Redux design pattern has been applied using NGRX with the signals implementation (https://ngrx.io/guide/signals/signal-store)
 * * NOTE: Take into account that the signals implementation is simpler so you won't see effects or selectors, because this implementation doesn't use those concepts
-* The Adapter design pattern has been use to map all the data that the api service receive and return, this can be checked in core\mappers
+* The Adapter design pattern has been use to map all the data that the api service receive and return (request and response), this can be checked in core\mappers
 * The statefull and staless components design pattern has been applied using Atomic Design
 * The BEM design pattern for CSS has been applied
 * The Dry principle has been applied, so you would see some providers sharing methods in order to avoid to repeat logic
-* All the visual text is in the text.constant.ts file, this helps to apply and reause values easier, also if the project needs to apply internationalization
-
+* All the visual text is in the text.constant.ts file, this helps to apply and reuse values easier, also if the project needs to apply internationalization
 
 # Unit Testing
 * To run the unit testing -> run npm test
 
-All the files are working but only some of them have unit test due to the time
-I tried to apply unit testing in different kind of files to show you how I work on any different file
-NOTE: I applied the AAA pattern for unit testing
+All the test files are working but only some of them have unit test due to the time
+I applied unit tests on different types of files to show you how I work on each different type of file.
+NOTE: The AAA pattern for unit testing has been applied.
 
-you can check:
+Check:
 input-text.component.spec.ts
 characters-reducer.spec.ts
 characters-handler.store.spec.ts
@@ -53,7 +52,7 @@ characters.mapper.spec.ts
 rick-and-morty.api.service.spec.ts
 character.component.spec.ts
 
-* NOTE: The Application runs for different screen resolutions, it also works fine for mobile or tablets
-* NOTE: The Application was deployed using github pages, you can see it in https://miltonvelillac.github.io/rick-and-morty
-* NOTE: There are 3 search screens (Locations, Dimensions, and Episodes), it could have been just one with 3 search entries, but I did it this way to show you how I handle reuse of components and logic, also the challenge requirement specified that there should be 3 pages.
+* NOTE: The Application works for different screen resolutions, it also works fine for mobile or tablet devices.
+* NOTE: The Application has been deployed using github pages, you can see it in https://miltonvelillac.github.io/rick-and-morty
+* NOTE: There are 3 search screens (Locations, Dimensions, and Episodes), it could have been just one with 3 search entries, but I did it this way to show you how I handle reuse of components and logic, also the challenge requirement specified that there must be 3 pages.
 
