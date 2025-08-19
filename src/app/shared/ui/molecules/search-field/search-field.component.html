@@ -1,6 +1,7 @@
 <section class="search-field">
-    <app-input-text
+    <app-autocomplete
         [formField]="formField()"
+        [options]="optionsToSearch()"
         [id]="idInput()"
         [name]="nameInput()"
         [label]="labelInput()"

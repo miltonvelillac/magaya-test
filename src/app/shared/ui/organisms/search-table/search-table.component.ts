@@ -1,6 +1,6 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { animate, style, transition, trigger } from '@angular/animations';
 import { PageEvent } from '@angular/material/paginator';
 import { GlobalSpinnerComponent } from '@shared/ui/atoms/global-spinner/global-spinner.component';
 import { SearchFieldComponent } from '@shared/ui/molecules/search-field/search-field.component';
@@ -13,7 +13,7 @@ import { TableComponent } from '@shared/ui/molecules/table/table.component';
     ReactiveFormsModule,
     GlobalSpinnerComponent,
     TableComponent,
-    SearchFieldComponent
+    SearchFieldComponent,
   ],
   templateUrl: './search-table.component.html',
   styleUrl: './search-table.component.scss',
@@ -31,6 +31,7 @@ import { TableComponent } from '@shared/ui/molecules/table/table.component';
 })
 export class SearchTableComponent<T> {
   formField = input(new FormControl());
+  optionsToSearch = input(['']);
   idInput = input('');
   nameInput = input('');
   labelInput = input('');

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { LocationHelperService } from '@core/services/location-helper/location-helper.service';
@@ -14,7 +14,7 @@ import { SearchTableComponent } from '@shared/ui/organisms/search-table/search-t
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    SearchTableComponent
+    SearchTableComponent,
   ],
   templateUrl: './locations.component.html',
   styleUrl: './locations.component.scss',
@@ -25,6 +25,7 @@ export class LocationsComponent implements OnDestroy {
   #locationHelperService = inject(LocationHelperService);
 
   locations = this.#locationHelperService.locations;
+  allLocations = this.#locationHelperService.allLocations;
   locationLoading = this.#locationHelperService.locationLoading;
   locationErrror = this.#locationHelperService.locationErrror;
 
@@ -47,7 +48,10 @@ export class LocationsComponent implements OnDestroy {
   charactersData = this.#locationHelperService.charactersData;
   isLoading = this.#locationHelperService.isLoading;
 
+  optionsToSearch = computed(() => this.#locationHandlerStore.allLocations()?.map(locations => locations.name));
+
   constructor() {
+    this.loadAllLocations();
     this.loadCharactersByIds();
     this.loadLocationsError();
     this.setDisableForm();
@@ -80,8 +84,18 @@ export class LocationsComponent implements OnDestroy {
     this.#locationHelperService.onRowClick(row);
   }
 
+  private loadAllLocations(): void {
+    effect(() => {
+      this.#locationHandlerStore.loadAllLocations();
+    });
+  }
+
   private loadCharactersByIds(): void {
-    effect(() => this.#locationHelperService.loadCharactersByIds({ locations: this.locations() }));
+    effect(() => {
+      const locations = this.locations();
+      if(!this.form.controls[this.formNames.location]?.value) return;
+      this.#locationHelperService.loadCharactersByIds({ locations })
+    });
   }
 
   private loadLocationsError(): void {

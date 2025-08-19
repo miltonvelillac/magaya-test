@@ -1,13 +1,13 @@
-import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { AutocompleteComponent } from '@shared/ui/atoms/autocomplete/autocomplete.component';
 import { ButtonComponent } from '@shared/ui/atoms/button/button.component';
-import { InputTextComponent } from '@shared/ui/atoms/input-text/input-text.component';
 
 @Component({
   selector: 'app-search-field',
   standalone: true,
   imports: [
-    InputTextComponent,
+    AutocompleteComponent,
     ButtonComponent,
   ],
   templateUrl: './search-field.component.html',
@@ -17,6 +17,7 @@ import { InputTextComponent } from '@shared/ui/atoms/input-text/input-text.compo
 export class SearchFieldComponent {
   idInput = input.required<string>();
   formField = input(new FormControl());
+  optionsToSearch = input(['']);
   nameInput = input('');
   labelInput = input('');
   placeholderInput = input('');

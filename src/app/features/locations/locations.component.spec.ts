@@ -16,6 +16,7 @@ describe('LocationsComponent', () => {
 
   const initValues = () => {
     locationHelperService.locations = signal([]);
+    locationHelperService.allLocations = signal([]);
     locationHelperService.locationLoading = signal(false);
     locationHelperService.locationErrror = signal({});
     locationHelperService.characters = signal([]);
@@ -30,6 +31,8 @@ describe('LocationsComponent', () => {
 
     locationHelperService.charactersData = signal([]);
     locationHelperService.isLoading = signal(false);
+
+    locationHandlerStore.allLocations = signal([]);
   }
 
   beforeEach(async () => {

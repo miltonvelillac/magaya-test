@@ -23,6 +23,7 @@ export class LocationHelperService {
   charactersErrror = this.#charactersHandlerStore.error;
 
   locations = this.#locationHandlerStore.locations;
+  allLocations = this.#locationHandlerStore.allLocations;
   locationLoading = this.#locationHandlerStore.isLoading;
   locationErrror = this.#locationHandlerStore.error;
 

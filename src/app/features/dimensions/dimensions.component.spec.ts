@@ -30,6 +30,8 @@ describe('DimensionsComponent', () => {
 
     locationHelperService.charactersData = signal([]);
     locationHelperService.isLoading = signal(false);
+
+    locationHandlerStore.allDimensions = signal(['']);
   }
 
   beforeEach(async () => {

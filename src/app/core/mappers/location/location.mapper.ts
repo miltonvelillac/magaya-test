@@ -12,7 +12,7 @@ import { PaginatedResponseModel } from '@shared/models/paginated-response.model'
 export class LocationMapper {
 
   getRequest(props: LocationRequestModel): LocationApiRequestModel {
-    const { ids, dimension, location, page } = props;
+    const { ids, dimension, locationName: location, page } = props;
 
     const params = new HttpParams({
       fromObject: {
@@ -23,7 +23,7 @@ export class LocationMapper {
     });
 
     const idsParams = ids?.join(',') || '';
-    
+
     return { ids: idsParams, params };
   }
 
@@ -43,8 +43,8 @@ export class LocationMapper {
 
   getLocations(props: { apiResponse: any }): LocationModel[] {
     const { apiResponse } = props;
-    return apiResponse?.results?.map((resp: any) => 
-      this.getSingleLocation({apiResponse: resp})
+    return apiResponse?.results?.map((resp: any) =>
+      this.getSingleLocation({ apiResponse: resp })
     ) || [];
   }
 
@@ -61,10 +61,22 @@ export class LocationMapper {
     }
   }
 
+  getDimensionsResponse(props: { apiResponse: any }): string[] {
+    const { apiResponse } = props;
+
+    let dimensions: { [key: string]: string } = {};
+    apiResponse?.results?.forEach((location: any) => {
+      const dimension = location.dimension;
+      if(!dimensions[dimension]) dimensions[dimension] = dimension;      
+    });
+
+    return Object.values(dimensions);
+  }
+
   getErrorResponse(props: { error: any, searchCriteria: string | number }): ErrorModel {
     const { error, searchCriteria } = props;
     const errorMessage = error?.error?.error;
-    const message = `${TextConstant.dimension.noDataFoundErrorMessage} ${ searchCriteria }`;
+    const message = `${TextConstant.dimension.noDataFoundErrorMessage} ${searchCriteria}`;
     return { messageFromApi: errorMessage, message };
   }
 

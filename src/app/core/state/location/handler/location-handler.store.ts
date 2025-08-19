@@ -8,6 +8,8 @@ import { LocationReducerStore } from '../reducer/location-reducer.store';
 export class LocationHandlerStore {
   #store = inject(LocationReducerStore);
 
+  allLocations = this.#store.allLocations;
+  allDimensions = this.#store.allDimensions;
   locations = this.#store.locations;
   selectedLocation = this.#store.selectedLocation;
   isLoading = this.#store.isLoading;
@@ -17,9 +19,13 @@ export class LocationHandlerStore {
     this.#store.clearState();
   }
 
+  loadAllLocations(): void {
+    this.#store.loadAllLocations().pipe(take(1)).subscribe();
+  }
+
   loadLocationsByFilters(props: { dimension?: string, location?: string }): void {
     const { dimension, location } = props;
-    this.#store.loadLocations({ dimension, location }).pipe(take(1)).subscribe();
+    this.#store.loadLocations({ dimension, locationName: location }).pipe(take(1)).subscribe();
   }
 
   loadLocationById(props: { id: number }): void {

@@ -3,7 +3,7 @@ import { HttpParams } from "@angular/common/http";
 export interface LocationRequestModel {
     ids?: number[];
     dimension?: string;
-    location?: string;
+    locationName?: string;
     page?: number;
 }
 
