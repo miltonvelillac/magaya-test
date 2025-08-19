@@ -1,4 +1,4 @@
-<mat-form-field class="example-full-width">
+<mat-form-field class="field">
     <mat-label>{{label()}}</mat-label>
     <input type="text"
            matInput
@@ -19,7 +19,9 @@
             (click)="onIconClick.emit()"
         >{{icon()}}</mat-icon>
     }
-    <mat-error>{{ errorMessage() }}</mat-error>
+    @if(errorMessage(); as error) {
+      <mat-error>{{ error }}</mat-error>
+    }
     <mat-autocomplete #auto="matAutocomplete">
       @for (option of (filteredOptions() | sortText); track option) {
         <mat-option [value]="option">{{option}}</mat-option>
