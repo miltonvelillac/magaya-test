@@ -1,4 +1,4 @@
-# MagayaTest
+# Rick and Morty
 * To run the project, run npm i, then run npm start
 * The project runs in http://localhost:4200/
 
