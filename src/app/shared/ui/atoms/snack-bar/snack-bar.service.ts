@@ -2,7 +2,8 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 enum SnackBarClassessEnum {
-  error = 'snack-error'
+  error = 'snack-error',
+  info = 'snack-info'
 }
 
 @Injectable({
@@ -12,7 +13,7 @@ export class SnackBarService {
   #snackBar = inject(MatSnackBar);
 
   #horizontalPosition = signal<MatSnackBarHorizontalPosition>('center');
-  #verticalPosition = signal<MatSnackBarVerticalPosition>('bottom');
+  #verticalPosition = signal<MatSnackBarVerticalPosition>('top');
 
   getHorizontalPosition = computed(() => this.#horizontalPosition());
   getVerticalPosition = computed(() => this.#verticalPosition());
@@ -23,6 +24,11 @@ export class SnackBarService {
   openErrorSnackBar(props: { message: string, actionButtonText?: string }): void {
     const { message, actionButtonText } = props;
     this.openSnackBar({ message, actionButtonText, panelClass: [SnackBarClassessEnum.error] });
+  }
+
+  openInfoSnackBar(props: { message: string, actionButtonText?: string }): void {
+    const { message, actionButtonText } = props;
+    this.openSnackBar({ message, actionButtonText, panelClass: [SnackBarClassessEnum.info] });
   }
 
   openSnackBar(props: { message: string, actionButtonText?: string, panelClass?: string[] }): void {

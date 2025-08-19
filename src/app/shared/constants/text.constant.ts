@@ -19,6 +19,7 @@ export const TextConstant = {
         noDataFound: 'No Data Found',
         noDataFoundErrorMessage: 'No Data Found for the dimension',
         snackbarErrorBtn: 'Close',
+        noCharactersFoundInfoMessage: 'No characters were found for dimension',
         initSearch: 'No search has been performed yet'
     },
     episodes: {
@@ -27,6 +28,7 @@ export const TextConstant = {
         placeholderInputField: 'Search by episode',
         noDataFound: 'No Data Found',
         noDataFoundErrorMessage: 'No Data Found for the episode',
+        noCharactersFoundInfoMessage: 'No characters were found for the episode',
         snackbarErrorBtn: 'Close',
         initSearch: 'No search has been performed yet'
     },
@@ -37,6 +39,7 @@ export const TextConstant = {
         noDataFound: 'No Data Found',
         noDataFoundErrorMessage: 'No Data Found for the location',
         snackbarErrorBtn: 'Close',
+        noCharactersFoundInfoMessage: 'No characters were found for location',
         initSearch: 'No search has been performed yet'
     },
     tableSearch: {

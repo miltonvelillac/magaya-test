@@ -67,9 +67,9 @@ export class CharacterSearchHelperService {
   }
 
   loadNoCharactersFound(props: { message: string, searchCriteria: string, actionButtonText: string }): void {
-    const { message, searchCriteria, actionButtonText } = props;
+    const { message, searchCriteria, actionButtonText } = props;    
     console.info(message);
-    this.#snackBarService.openErrorSnackBar({ message: `${message}: ${searchCriteria}`, actionButtonText });
+    this.#snackBarService.openInfoSnackBar({ message: `${message}: ${searchCriteria}`, actionButtonText });
   };
 
   private getCharacterIds(props: { charactersUrl: string[] }): number[] {

@@ -97,6 +97,9 @@ export class EpisodeHelperService {
   }
 
   loadNoCharactersFound(props: { message: string, searchCriteria: string, actionButtonText: string }): void {
+    const errorMessage = this.episodesErrror ? this.episodesErrror() : undefined;
+    const isLoading = this.episodesLoading();
+    if (errorMessage || isLoading) return;
     this.#characterSearchHelperService.loadNoCharactersFound(props);
   }
 

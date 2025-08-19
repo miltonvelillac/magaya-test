@@ -84,3 +84,18 @@ input {
     color: var(--text);
   }
 }
+
+.mat-mdc-snack-bar-container.snack-info {
+  --mdc-snackbar-container-color: var(--info);
+  --mdc-snackbar-supporting-text-color: var(--text);
+  --mdc-snackbar-button-color: var(--text);
+
+  .mdc-snackbar__surface {
+    background-color: var(--info);
+  }
+
+  .mdc-snackbar__label,
+  .mdc-button__label {
+    color: var(--text);
+  }
+}

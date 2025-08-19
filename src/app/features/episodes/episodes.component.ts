@@ -105,7 +105,7 @@ export class EpisodesComponent implements OnDestroy {
       const characters = this.characters();
       const searchCriteria = this.form.controls[this.formNames.episodeName]?.value || '';
       if(searchCriteria && characters?.length === 0 && !this.charactersLoading()) {
-        this.#episodeHelperService.loadNoCharactersFound({ searchCriteria, message: this.labels.noDataFoundErrorMessage, actionButtonText: this.labels.snackbarErrorBtn });
+        this.#episodeHelperService.loadNoCharactersFound({ searchCriteria, message: this.labels.noCharactersFoundInfoMessage, actionButtonText: this.labels.snackbarErrorBtn });
       }
     })
   }

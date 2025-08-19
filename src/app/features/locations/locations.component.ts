@@ -110,7 +110,7 @@ export class LocationsComponent implements OnDestroy {
       const characters = this.characters();
       const searchCriteria = this.form.controls[this.formNames.location]?.value || '';
       if(searchCriteria && characters?.length === 0 && !this.charactersLoading()) {
-        this.#locationHelperService.loadNoCharactersFound({ searchCriteria, message: this.labels.noDataFoundErrorMessage, actionButtonText: this.labels.snackbarErrorBtn });
+        this.#locationHelperService.loadNoCharactersFound({ searchCriteria, message: this.labels.noCharactersFoundInfoMessage, actionButtonText: this.labels.snackbarErrorBtn });
       }
     })
   }

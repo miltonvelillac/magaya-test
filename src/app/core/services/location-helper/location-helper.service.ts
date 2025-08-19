@@ -88,9 +88,10 @@ export class LocationHelperService {
   };
 
   loadNoCharactersFound(props: { message: string, searchCriteria: string, actionButtonText: string }): void {
-    const { message, searchCriteria, actionButtonText } = props;
-    console.info(message);
-    this.#snackBarService.openErrorSnackBar({ message: `${message}: ${searchCriteria}`, actionButtonText });
+    const errorMessage = this.locationErrror ? this.locationErrror() : undefined;
+    const isLoading = this.locationLoading();
+    if (errorMessage || isLoading) return;
+    this.#characterSearchHelperService.loadNoCharactersFound(props);
   };
 
   setDisableForm(props: { form: FormGroup }): void {
