@@ -9,8 +9,13 @@ export class EpisodesHandlerStore {
   #store = inject(EpisodeReducerStore);
 
   episodes = this.#store.episodes;
+  allEpisodes = this.#store.allEpisodes;
   isLoading = this.#store.isLoading;
   error = this.#store.error;
+
+  loaAlldEpisodes(): void {
+    this.#store.loaAlldEpisodes().pipe(take(1)).subscribe();
+  }
 
   loadEpisodes(props: { episodeName: string }): void {
     const { episodeName } = props;
@@ -20,5 +25,5 @@ export class EpisodesHandlerStore {
   clearState(): void {
     this.#store.clearState();
   }
-  
+
 }

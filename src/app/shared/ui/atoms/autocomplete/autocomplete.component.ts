@@ -4,6 +4,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { SortTextPipe } from '@shared/pipes/sort-text.pipe';
 import { map, startWith, Subscription, tap } from 'rxjs';
 
 @Component({
@@ -15,7 +16,8 @@ import { map, startWith, Subscription, tap } from 'rxjs';
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
-    MatIconModule
+    MatIconModule,
+    SortTextPipe
   ],
   templateUrl: './autocomplete.component.html',
   styleUrl: './autocomplete.component.scss',

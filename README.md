@@ -51,6 +51,7 @@ characters-handler.store.spec.ts
 characters.mapper.spec.ts
 rick-and-morty.api.service.spec.ts
 character.component.spec.ts
+sort-text.pipe.spec.ts
 
 * NOTE: The Application works for different screen resolutions, it also works fine for mobile or tablet devices.
 * NOTE: The Application has been deployed using github pages, you can see it in https://miltonvelillac.github.io/rick-and-morty

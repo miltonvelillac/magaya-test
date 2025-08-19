@@ -80,4 +80,22 @@ export class LocationMapper {
     return { messageFromApi: errorMessage, message };
   }
 
+
+  getLocationsMultipleArray(props: { response: any,  }) {
+  const { response } = props;
+  const locationsArray: LocationModel[][] = [];
+  const dimensionArray: string[][] = [];
+  const dimensions: { [key: string]: string } = {};
+  response.forEach((resp: any) => {
+    locationsArray.push(this.getResponse({ apiResponse: resp }).results);
+    dimensionArray.push(this.getDimensionsResponse({ apiResponse: resp }))
+  });
+
+  dimensionArray.flat().forEach(dim => dimensions[dim] = dim);
+  const dimensionsResult = Object.values(dimensions);
+  const locationsResult = locationsArray.flat();
+  
+  return { locations: locationsResult, dimensions: dimensionsResult };
+}
+
 }

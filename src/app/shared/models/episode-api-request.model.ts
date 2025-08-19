@@ -5,5 +5,6 @@ export interface EpisodApiRequestModel {
 }
 
 export interface EpisodRequestModel {
-    episodeName: string;
+    episodeName?: string;
+    page?: number;
 }

@@ -96,6 +96,10 @@ export class EpisodeHelperService {
     this.pageIndex.update(() => 0);
   }
 
+  loadNoCharactersFound(props: { message: string, searchCriteria: string, actionButtonText: string }): void {
+    this.#characterSearchHelperService.loadNoCharactersFound(props);
+  }
+
   onDestroy(): void {
     this.#charactersHandlerStore.clearState();
     this.#episodesHandlerStore.clearState();

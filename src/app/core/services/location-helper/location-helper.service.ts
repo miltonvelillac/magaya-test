@@ -87,6 +87,12 @@ export class LocationHelperService {
     this.#snackBarService.openErrorSnackBar({ message: errorMessage?.message || '', actionButtonText: snackbarErrorBtn });
   };
 
+  loadNoCharactersFound(props: { message: string, searchCriteria: string, actionButtonText: string }): void {
+    const { message, searchCriteria, actionButtonText } = props;
+    console.info(message);
+    this.#snackBarService.openErrorSnackBar({ message: `${message}: ${searchCriteria}`, actionButtonText });
+  };
+
   setDisableForm(props: { form: FormGroup }): void {
     const { form } = props;
     this.isLoading() ? form.disable() : form.enable();

@@ -5,6 +5,7 @@ import { CharacterModel } from '@shared/models/character.model';
 import { RegexUtils } from '@shared/utils/regex/regex.utils';
 import { NavigationServiceTsService } from '../navigation/navigation.service.ts.service';
 import { CharacterColumn } from '@shared/types/character-column.type';
+import { SnackBarService } from '@shared/ui/atoms/snack-bar/snack-bar.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ import { CharacterColumn } from '@shared/types/character-column.type';
 export class CharacterSearchHelperService {
   #charactersHandlerStore = inject(CharactersHandlerStore);
   #navigationServiceTsService = inject(NavigationServiceTsService);
+  #snackBarService = inject(SnackBarService);
 
   displayedColumns: CharacterColumn[] = ['id', 'name', 'status', 'species', 'gender'];
 
@@ -63,6 +65,12 @@ export class CharacterSearchHelperService {
       this.#charactersHandlerStore.setCharacters({ characters: [] });
     }
   }
+
+  loadNoCharactersFound(props: { message: string, searchCriteria: string, actionButtonText: string }): void {
+    const { message, searchCriteria, actionButtonText } = props;
+    console.info(message);
+    this.#snackBarService.openErrorSnackBar({ message: `${message}: ${searchCriteria}`, actionButtonText });
+  };
 
   private getCharacterIds(props: { charactersUrl: string[] }): number[] {
     const { charactersUrl } = props;

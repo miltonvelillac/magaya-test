@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { EpisodeHelperService } from '@core/services/episode-helper/episode-helper.service';
@@ -47,9 +47,13 @@ export class EpisodesComponent implements OnDestroy {
   charactersData = this.#episodeHelperService.charactersData;
   isLoading = this.#episodeHelperService.isLoading;
 
+  optionsToSearch = computed(() => this.#episodesHandlerStore.allEpisodes()?.map(episode => episode.name));
+
   constructor() {
+    this.loadAllLocations();
     this.loadCharactersByIds();
     this.loadLocationsError();
+    this.listenCharacters();
     this.setDisableForm();
   }
 
@@ -80,6 +84,12 @@ export class EpisodesComponent implements OnDestroy {
     this.#episodeHelperService.onRowClick(row);
   }
 
+  private loadAllLocations(): void {
+    effect(() => {
+      this.#episodesHandlerStore.loaAlldEpisodes();
+    });
+  }
+
   private loadCharactersByIds(): void {
     effect(() => this.#episodeHelperService.loadCharactersByIds({ episodes: this.episodes() }));
   }
@@ -89,6 +99,16 @@ export class EpisodesComponent implements OnDestroy {
       { noDataFound: this.labels.noDataFound, snackbarErrorBtn: this.labels.snackbarErrorBtn }
     ));
   };
+
+  private listenCharacters(): void {
+    effect(() => {
+      const characters = this.characters();
+      const searchCriteria = this.form.controls[this.formNames.episodeName]?.value || '';
+      if(searchCriteria && characters?.length === 0 && !this.charactersLoading()) {
+        this.#episodeHelperService.loadNoCharactersFound({ searchCriteria, message: this.labels.noDataFoundErrorMessage, actionButtonText: this.labels.snackbarErrorBtn });
+      }
+    })
+  }
 
   private setDisableForm(): void {
     effect(() => this.#episodeHelperService.setDisableForm({ form: this.form }));

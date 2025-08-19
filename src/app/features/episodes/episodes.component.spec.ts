@@ -30,6 +30,8 @@ describe('EpisodesComponent', () => {
 
     episodeHelperService.charactersData = signal([]);
     episodeHelperService.isLoading = signal(false);
+
+    episodesHandlerStore.allEpisodes = signal([]);
   }
 
   beforeEach(async () => {

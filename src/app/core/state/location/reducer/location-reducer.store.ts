@@ -11,7 +11,8 @@ import {
 import { ErrorModel } from "@shared/models/error.model";
 import { LocationRequestModel } from "@shared/models/location-api-request.model";
 import { LocationModel } from "@shared/models/location.model";
-import { catchError, Observable, of, tap, throwError } from "rxjs";
+import { PaginatedResponseModel } from "@shared/models/paginated-response.model";
+import { catchError, forkJoin, map, mergeMap, Observable, of, tap, throwError } from "rxjs";
 
 type LocationState = {
   allLocations: LocationModel[];
@@ -44,24 +45,37 @@ export const LocationReducerStore = signalStore(
   ),
   withMethods((store, rickAndMortyApiService = inject(RickAndMortyApiService), locationMapper = inject(LocationMapper)) => ({
     clearState(): void {
-      patchState(store, { ...initialState, allLocations: [ ...store.allLocations() ], allDimensions: [ ...store.allDimensions() ]});
+      patchState(store, { ...initialState, allLocations: [...store.allLocations()], allDimensions: [...store.allDimensions()] });
     },
     loadAllLocations(): Observable<any> {
       patchState(store, { isLoading: true });
-
-      // Note: This is to avoid to call the api again if the UI alrady has the needed info due to this data doesn't change fequently
-      const allLocations = untracked(() => store.allLocations());
-      if(allLocations?.length > 0) {
-        patchState(store, { isLoading: false, error: undefined });
-        return of();
-      }
-
-      const request = locationMapper.getRequest({});
+      let page = 1;
+      const request = locationMapper.getRequest({ page });
       return rickAndMortyApiService.getLocationsByFilters(request).pipe(
-        tap((resp) => {
-          const response = locationMapper.getResponse({ apiResponse: resp });
-          const dimensions = locationMapper.getDimensionsResponse({ apiResponse: resp });
-          patchState(store, { isLoading: false, allLocations: response.results, allDimensions: dimensions, error: undefined })
+        map((resp) => ({
+          locations: locationMapper.getResponse({ apiResponse: resp }),
+          dimensions: locationMapper.getDimensionsResponse({ apiResponse: resp })
+        })),
+        tap(({ locations, dimensions }) => patchState(store, { isLoading: false, allLocations: locations.results, allDimensions: dimensions, error: undefined })),
+        map(({ locations }) => {
+          const pages = locations.info.pages;
+          if (pages <= 1) return [];
+
+          page++;
+          let nextRequests: Observable<any>[] = [];
+          for (let index = page; index <= pages; index++) {
+            const req = locationMapper.getRequest({ page: index });
+            nextRequests.push(rickAndMortyApiService.getLocationsByFilters(req));
+          }
+          return nextRequests;
+        }),
+        mergeMap((resp) => forkJoin(resp)),
+        tap((resp: any[]) => {
+          const {locations, dimensions } = locationMapper.getLocationsMultipleArray({ response: resp });
+          const allLocations = untracked(() => store.allLocations());
+          const allDimensions = untracked(() => store.allDimensions());
+
+          patchState(store, { isLoading: false, allLocations: [...allLocations, ...locations], allDimensions: [ ...allDimensions, ...dimensions], error: undefined });
         }),
         catchError(err => {
           const error: ErrorModel = locationMapper.getErrorResponse({ error: err, searchCriteria: 'All Locations' });

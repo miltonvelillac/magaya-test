@@ -54,6 +54,7 @@ export class LocationsComponent implements OnDestroy {
     this.loadAllLocations();
     this.loadCharactersByIds();
     this.loadLocationsError();
+    this.listenCharacters();
     this.setDisableForm();
   }
 
@@ -103,6 +104,16 @@ export class LocationsComponent implements OnDestroy {
       { noDataFound: this.labels.noDataFound, snackbarErrorBtn: this.labels.snackbarErrorBtn }
     ));
   };
+
+  private listenCharacters(): void {
+    effect(() => {
+      const characters = this.characters();
+      const searchCriteria = this.form.controls[this.formNames.location]?.value || '';
+      if(searchCriteria && characters?.length === 0 && !this.charactersLoading()) {
+        this.#locationHelperService.loadNoCharactersFound({ searchCriteria, message: this.labels.noDataFoundErrorMessage, actionButtonText: this.labels.snackbarErrorBtn });
+      }
+    })
+  }
 
   private setDisableForm(): void {
     effect(() => this.#locationHelperService.setDisableForm({ form: this.form }));
